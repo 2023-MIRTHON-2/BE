@@ -24,12 +24,7 @@ class Profile(models.Model):
     phone = models.CharField(max_length=128) # 전화번호, 수정됨
     registration = models.CharField(max_length=10) # 사업자번호, 수정됨
    # document = models.FileField(upload_to='documents/')  # 문서 파일
-   #  category = models.CharField(max_length=128, choices=[(status.value, status.name) for status in Category]) # 업종
     category = models.CharField(max_length=128, choices=Category.choices())
     location = models.TextField() # 위치
 
 
-# @receiver(post_save, sender=User)
-# def create_user_profile(sender, instance, created, **kwargs):
-#     if created:
-#         Profile.objects.create(user=instance)
