@@ -1,5 +1,6 @@
 from django.contrib.auth.models import User
 from django.contrib.auth.password_validation import validate_password
+from django.contrib.auth import authenticate
 
 from rest_framework import serializers
 from rest_framework.authtoken.models import Token
@@ -38,3 +39,16 @@ class RegisterSerializer(serializers.ModelSerializer): #회원가입 시리얼�
         token = Token.objects.create(user=user)
         return user
 
+class LoginSerializer(serializers.Serializer):
+    username = serializers.CharField(required=True)
+    password = serializers.CharField(required=True, write_only = True)
+#write_only 옵션을 통해 클라이언트 -> 서버 방향의 역질혈화는 가능, 서버-> 클라이언트 방향의 직렬화는 불가능
+
+    def validate(self, data):
+        user = authenticate(**data)
+        if user:
+            token = Token.objects.get(user=user) #토큰에서 유저 찾아 응답
+            return token
+        raise serializers.ValidationError(
+            {"error": "제공된 자격 증명으로 로그인할 수 없습니다"}
+        )
