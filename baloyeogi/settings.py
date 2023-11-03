@@ -52,9 +52,18 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'users',
     
-    # 설치한 라이브러리
+    # rest framework 관련
     'rest_framework',
     'rest_framework.authtoken',
+    
+    # dj-rest-auth 관련
+    'dj_rest_auth',
+    'dj_rest_auth.registration',
+	'allauth',
+	'allauth.account',
+	
+    # simple-jwt 관련
+	'rest_framework_simplejwt',
 ]
 
 MIDDLEWARE = [
