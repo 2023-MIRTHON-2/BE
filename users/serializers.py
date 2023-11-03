@@ -23,7 +23,7 @@ class RegisterSerializer(serializers.ModelSerializer):
     # Profile 관련 필드 추가
     nickname = serializers.CharField(source='profile.nickname', required=True)
     phone = serializers.CharField(source='profile.phone', required=True)
-    registration =  serializers.CharField(source='profile.registration', required=True)
+    registration = serializers.CharField(source='profile.registration', required=True)
     #document = serializers.FileField(required=True)
     category = serializers.ChoiceField(source='profile.category', choices=[(tag.value, tag.value) for tag in Category])
     location = serializers.CharField(source='profile.location', required=True)
