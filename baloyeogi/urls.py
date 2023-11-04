@@ -27,6 +27,7 @@ urlpatterns = [
     path('users/', include('users.urls')),
     path('dj/', include('dj_rest_auth.urls')),
     path('dj/signup/', include('dj_rest_auth.registration.urls')),
+    path('places/', include('places.urls')),
 ]
 
 if settings.DEBUG:
