@@ -8,4 +8,4 @@ class PlaceSerializer(serializers.ModelSerializer):
     class Meta:
         model = Place
         fields = ['id', 'presidentId', 'PlaceImageUrl', 'licenseNum', 'category', 'location', 'article', 'cost',
-                  'startDate', 'endDate']
+                  'startDate', 'endDate', 'about']

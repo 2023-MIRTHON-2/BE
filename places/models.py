@@ -29,6 +29,7 @@ class Place(models.Model):
     cost = models.CharField(max_length=100)
     startDate = models.DateField(default=datetime.date.today)
     endDate = models.DateField(default=datetime.date.today)
+    about = models.TextField()  # 사업에 대한 설명
     # 들어온 사업 계획서
 
     def __str__(self):
