@@ -17,7 +17,7 @@ class Category(enum.Enum):
 
 
 class Place(models.Model):
-    presidentId = models.CharField(max_length=100)
+    presidentId = models.ForeignKey('users.User', on_delete=models.CASCADE)
     PlaceImageUrl = models.CharField(max_length=100)
     licenseNum = models.CharField(max_length=100)
     # lease = models.FileField(upload_to='documents/')
