@@ -58,6 +58,9 @@ INSTALLED_APPS = [
 
     # Swagger 관련
     'drf_yasg',
+
+    # cors 관련
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
@@ -69,6 +72,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'allauth.account.middleware.AccountMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
 ]
 
 ROOT_URLCONF = 'baloyeogi.urls'
@@ -212,3 +216,10 @@ AUTH_USER_MODEL = 'users.User'
 
 # dj_rest_auth.registration.views.SocialLoginView를 쓰려면 꼭 추가해줘야 함
 REST_USE_JWT = True
+
+CORS_ORIGIN_WHITELIST = [
+    "http://localhost:3000",
+    "http://127.0.0.1:8000",]
+
+CORS_ALLOW_CREDENTIALS = True
+CORS_ORIGIN_ALLOW_ALL = True
