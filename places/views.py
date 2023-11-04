@@ -29,6 +29,8 @@ class FilterPlaceListView(APIView):
         serializer = PlaceSerializer(places, many=True)
         return Response(serializer.data)
 
+
+class MakePlaceView(APIView):
     # 목데이터용 임시 post 메서드
     def post(self, request):
         serializer = PlaceSerializer(data=request.data)
