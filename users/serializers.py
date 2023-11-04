@@ -31,7 +31,7 @@ class CustomRegisterSerializer(RegisterSerializer):
         adapter = get_adapter()
         user = adapter.new_user(request)
         self.cleaned_data = self.get_cleaned_data()
-        user.nickname = self.cleaned_data.get('nickname')
+        user.realname = self.cleaned_data.get('realname')
         user.phone = self.cleaned_data.get('phone')
         user.license = self.cleaned_data.get('license')
         # user.profile.document = self.cleaned_data.get('document')

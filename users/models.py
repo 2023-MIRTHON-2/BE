@@ -1,8 +1,7 @@
 import enum
 
 from django.db import models
-from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
-from django.contrib.auth.models import UserManager
+from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
 
 
 class Category(enum.Enum):
@@ -15,6 +14,31 @@ class Category(enum.Enum):
     def choices(cls):
         # 이 메서드는 enum의 멤버들을 (실제 값, 사람이 읽을 수 있는 이름) 형태의 튜플로 변환합니다.
         return [(key.value, key.name) for key in cls]
+
+
+class UserManager(BaseUserManager):
+    def create_user(self, password, **extra_fields):
+        """
+        주어진 이메일, 비밀번호 등 개인정보로 인스턴스 생성
+        """
+        user = self.model(**extra_fields)
+        user.set_password(password)
+        user.save(using=self._db)
+        return user
+
+    def create_superuser(self, email=None, password=None, **extra_fields):
+        """
+        주어진 이메일, 비밀번호 등 개인정보로 User 인스턴스 생성
+        단, 최상위 사용자이므로 권한을 부여
+        """
+        superuser = self.create_user(password=password)
+
+        # superuser.is_staff = True
+        # superuser.is_superuser = True
+        # superuser.is_active = True
+
+        superuser.save(using=self._db)
+        return superuser
 
 
 class User(AbstractBaseUser, PermissionsMixin):
@@ -30,6 +54,9 @@ class User(AbstractBaseUser, PermissionsMixin):
     USERNAME_FIELD = 'username'
 
     objects = UserManager()
+
+    email = None
+    email_verified = None
 
     class Meta:
         db_table = 'users'
