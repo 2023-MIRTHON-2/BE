@@ -5,5 +5,3 @@ urlpatterns = [
     path('checklicense/<str:license_number>/', CheckLicenseView.as_view()),
 
 ]
-
-#dkdk

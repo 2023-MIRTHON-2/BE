@@ -1,24 +1,6 @@
-import jwt
 from rest_framework.views import APIView
-from .serializers import *
-from rest_framework_simplejwt.serializers import TokenObtainPairSerializer, TokenRefreshSerializer
-from rest_framework import status, exceptions
-from rest_framework.generics import RetrieveUpdateAPIView
 from rest_framework.response import Response
-from django.contrib.auth import authenticate
-from django.shortcuts import get_object_or_404
-from baloyeogi.settings import SECRET_KEY
-
-# UserViewSet
-from rest_framework import viewsets
-from rest_framework.permissions import IsAuthenticated
-from .serializers import *
-
-# from rest_framework import status
-from .models import *
-
-from django.contrib.auth.models import User
-from rest_framework import generics, status
+from rest_framework import status
 from django.conf import settings
 import requests
 
