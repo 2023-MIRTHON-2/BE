@@ -3,7 +3,7 @@ from rest_framework import serializers
 from .models import Place
 
 
-class PlaceSerializer(serializers.ModelSerializer):
+class DetailPlaceSerializer(serializers.ModelSerializer):
     presidentId = serializers.CharField(source='presidentId.username', read_only=True)
     class Meta:
         model = Place
@@ -12,7 +12,8 @@ class PlaceSerializer(serializers.ModelSerializer):
 
 
 # 메인페이지용 공간 정보 리스트 조회(location, category, placeName, placeImageUrl. cost)
-class LocationPlaceSerializer(serializers.ModelSerializer):
+class PlaceSerializer(serializers.ModelSerializer):
     class Meta:
         model = Place
         fields = ['location', 'category', 'placeName', 'placeImageUrl', 'cost']
+
