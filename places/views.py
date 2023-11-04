@@ -14,7 +14,7 @@ class PlaceListView(APIView):
         return Response(serializer.data)
 
 
-# 2. 공간 정보 상세 조회
+# 2. 메인페이지용 공간 정보 리스트 조회(location, category, placeName, placeImageUrl. cost)
 
 
 
