@@ -2,7 +2,7 @@ from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from .models import Place
-from .serializers import PlaceSerializer, LocationPlaceSerializer
+from .serializers import PlaceSerializer
 
 
 # 가. 공간 정보 조회
