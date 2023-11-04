@@ -46,9 +46,3 @@ class CustomUserDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ('username', 'realname', 'phone', 'license', 'category', 'location')
-
-
-class LicenseSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = User
-        fields = ('license',)
