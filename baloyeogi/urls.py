@@ -42,7 +42,7 @@ urlpatterns = [
     # path('api/', include(('users.urls', 'api'))),
     path('users/', include('users.urls')),
     path('dj/', include('dj_rest_auth.urls')),
-    path('dj/registration/', include('dj_rest_auth.registration.urls')),
+    path('dj/signup/', include('dj_rest_auth.registration.urls')),
 ]
 
 if settings.DEBUG:
