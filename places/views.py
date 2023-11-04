@@ -2,7 +2,7 @@ from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from .models import Place
-from .serializers import PlaceSerializer
+from .serializers import PlaceSerializer, LocationPlaceSerializer
 
 
 # 가. 공간 정보 조회
@@ -15,6 +15,12 @@ class PlaceListView(APIView):
 
 
 # 2. 메인페이지용 공간 정보 리스트 조회(location, category, placeName, placeImageUrl. cost)
+# location으로 필터링
+class LocationPlaceListView(APIView):
+    def get(self, request, location):
+        places = Place.objects.filter(location=location)
+        serializer = LocationPlaceSerializer(places, many=True)
+        return Response(serializer.data)
 
 
 

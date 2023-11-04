@@ -9,3 +9,10 @@ class PlaceSerializer(serializers.ModelSerializer):
         model = Place
         fields = ['id', 'presidentId', 'placeName', 'placeImageUrl', 'licenseNum', 'category', 'location', 'article',
                   'cost', 'startDate', 'endDate', 'about']
+
+
+# 메인페이지용 공간 정보 리스트 조회(location, category, placeName, placeImageUrl. cost)
+class LocationPlaceSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Place
+        fields = ['location', 'category', 'placeName', 'placeImageUrl', 'cost']
