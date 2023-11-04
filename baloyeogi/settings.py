@@ -66,6 +66,9 @@ INSTALLED_APPS = [
 
     # simple-jwt 관련
     'rest_framework_simplejwt',
+
+    # Swagger 관련
+    'drf_yasg',
 ]
 
 MIDDLEWARE = [
