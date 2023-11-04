@@ -3,3 +3,9 @@ from rest_framework import serializers
 from .models import Place
 
 
+class PlaceSerializer(serializers.ModelSerializer):
+    presidentId = serializers.CharField(source='presidentId.username', read_only=True)
+    class Meta:
+        model = Place
+        fields = ['id', 'presidentId', 'PlaceImageUrl', 'licenseNum', 'category', 'location', 'article', 'cost',
+                  'startDate', 'endDate']

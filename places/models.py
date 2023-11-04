@@ -31,3 +31,6 @@ class Place(models.Model):
     endDate = models.DateField(default=datetime.date.today)
     # 들어온 사업 계획서
 
+    def __str__(self):
+        return self.id
+
