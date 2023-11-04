@@ -2,6 +2,7 @@ import enum
 import datetime
 
 from django.db import models
+from users.models import User
 
 
 class Category(enum.Enum):
@@ -17,7 +18,8 @@ class Category(enum.Enum):
 
 
 class Place(models.Model):
-    presidentId = models.ForeignKey('users.User', on_delete=models.CASCADE)
+    id = models.AutoField(primary_key=True)
+    presidentId = models.ForeignKey(User, on_delete=models.CASCADE)
     PlaceImageUrl = models.CharField(max_length=100)
     licenseNum = models.CharField(max_length=100)
     # lease = models.FileField(upload_to='documents/')
