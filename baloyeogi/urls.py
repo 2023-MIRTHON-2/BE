@@ -6,6 +6,7 @@ from django.conf.urls import url
 from rest_framework import routers
 from rest_framework import permissions
 
+
 from drf_yasg.views import get_schema_view
 from rest_framework.permissions import AllowAny
 from drf_yasg import openapi
@@ -25,6 +26,7 @@ schema_view = get_schema_view(
     public=True,
     permission_classes=(AllowAny,),
     # patterns=schema_url_patterns,
+
 )
 
 urlpatterns = [
