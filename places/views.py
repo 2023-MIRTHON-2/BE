@@ -56,7 +56,7 @@ class PlaceListView(APIView):
 
 class PlaceDetailView(APIView):
     @swagger_auto_schema(request_body=PlaceListSerializer)
-    def delete(self, request, post_id):
-        place = get_object_or_404(Place, pk=post_id)
+    def delete(self, request, place_id):
+        place = get_object_or_404(Place, pk=place_id)
         place.delete()
         return Response({'message': '삭제되었습니다.'}, status=status.HTTP_204_NO_CONTENT)
