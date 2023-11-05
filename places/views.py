@@ -25,7 +25,6 @@ class MakePlaceListView(APIView):
 
 
 class PlaceListView(APIView):
-    # 위치와 카테고리를 받아서 해당하는 사업장을 보여준다. 위키와 카테고리는 각각 all이 들어오면, 모든 사업장을 보여준다.
     # def get(self, request, category, location):
     #     if category == 'all' and location == 'all':
     #         places = Place.objects.all()
