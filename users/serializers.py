@@ -21,13 +21,15 @@ class CustomRegisterSerializer(RegisterSerializer):
         print("is_ceo value:", is_ceo)
 
         if is_ceo:
-            user = User(username=request.data['username'],
-                        realname=request.data['realname'],
-                        phone=request.data['phone'],
-                        license=request.data['license'],
-                        category=request.data['category'],
-                        location=request.data['location'],
-                        is_ceo=request.data['is_ceo']
+            user = User(
+                        # username=request.data['username'],
+                        # realname=request.data['realname'],
+                        # phone=request.data['phone'],
+                        # license=request.data['license'],
+                        # category=request.data['category'],
+                        # location=request.data['location'],
+                        # is_ceo=request.data['is_ceo']
+                        **request
                         )
 
         else:
