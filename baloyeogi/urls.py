@@ -11,6 +11,7 @@ from drf_yasg.views import get_schema_view
 from rest_framework.permissions import AllowAny
 from drf_yasg import openapi
 
+
 # router = routers.DefaultRouter()
 
 schema_view = get_schema_view(
@@ -34,9 +35,13 @@ urlpatterns = [
     path('users/', include('users.urls')),
     path('places/', include('places.urls')),
     path('dj/', include('dj_rest_auth.urls')),
-    path('dj/signup/', include('dj_rest_auth.registration.urls')),
+   path('dj/signup/<str:registration_type>/', include('dj_rest_auth.registration.urls')),
+    # path('dj/signup/<str:registration_type>/', CustomRegisterView.as_view(),  name='custom_register'),
+
 
     url(r'^swagger(?P<format>\.json|\.yaml)/$', schema_view.without_ui(cache_timeout=0), name='schema-json'),
     url(r'^swagger/$', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     url(r'^redoc/$', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc-v1'),
+
+
 ]
