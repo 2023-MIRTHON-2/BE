@@ -1,11 +1,14 @@
 from django.core import serializers
 from rest_framework import serializers
+from rest_framework.fields import ReadOnlyField
 from .models import Place
+from users.models import User
 
 
 class PlaceListSerializer(serializers.ModelSerializer):
+    presidentId = serializers.CharField(source='presidentId.username', read_only=True)
     class Meta:
-        fields = ['id', 'placeName', 'placeImageUrl', 'category', 'location', 'article', 'cost']
+        fields = ['id', 'presidentId', 'placeName', 'placeImageUrl', 'category', 'location', 'article', 'cost']
 
     Meta.model = Place
     id = serializers.IntegerField(read_only=True)
@@ -15,5 +18,4 @@ class PlaceListSerializer(serializers.ModelSerializer):
     location = serializers.CharField()
     article = serializers.CharField()
     cost = serializers.CharField()
-
 
