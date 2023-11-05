@@ -20,6 +20,7 @@ environ.Env.read_env(
 
 # 설정한 변수를 읽어옴
 API_KEY = env('API_KEY')
+ROOT_PW = env('ROOT_PW')
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
@@ -99,10 +100,21 @@ WSGI_APPLICATION = 'baloyeogi.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'baroyeogi',
+        'USER': 'root',
+        'PASSWORD': ROOT_PW,
+        'HOST': 'svc.sel5.cloudtype.app',
+        'PORT': '32665'
     }
 }
 
