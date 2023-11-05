@@ -9,7 +9,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 
 
-class PlaceListView(APIView):
+class MakePlaceListView(APIView):
 
     def get(self, request):
         places = Place.objects.all()
@@ -22,8 +22,6 @@ class PlaceListView(APIView):
             serializer.save(presidentId=request.user)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(status=status.HTTP_404_NOT_FOUND)
-
-
 
 
 class PlaceDetailView(APIView):
