@@ -5,6 +5,6 @@ app_name = 'places'
 
 urlpatterns = [
     path('', MakePlaceListView.as_view()),
-    path('<str:category>/<str:location>/', PlaceListView.as_view()),
+    path('<str:business>/<str:location>/', PlaceListView.as_view()),
     path('<int:place_id>/', PlaceDetailView.as_view()),
 ]

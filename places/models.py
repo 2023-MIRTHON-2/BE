@@ -35,3 +35,12 @@ class Place(models.Model):
     def __str__(self):
         return self.placeName
 
+
+class PlaceImage(models.Model):
+    id = models.AutoField(primary_key=True)
+    placeId = models.ForeignKey(Place, on_delete=models.CASCADE)
+    placeImage = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.placeImage
+
