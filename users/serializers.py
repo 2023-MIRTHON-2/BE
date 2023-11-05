@@ -11,19 +11,24 @@ class CustomRegisterSerializer(serializers.ModelSerializer):
         fields = ['username', 'realname', 'phone', 'license', 'category', 'location', 'is_ceo']
 
     def create(self, request):
-        is_ceo = request.data.get('is_ceo', True)
+        is_ceo = request.pop('is_ceo')
 
         if is_ceo:
-            user = User.objects.create_user(
-                        **request
-                        )
-
+            user = User.objects.create_user(username=request['username'],
+                                            realname=request['realname'],
+                                            phone=request['phone'],
+                                            license=request['license'],
+                                            category=request['category'],
+                                            location=request['location'],
+                                            is_ceo=True)
         else:
-            user = User.objects.create_user(
-                        **request
-                        )
-
-
+            user = User.objects.create_user(username=request['username'],
+                                            realname=request['realname'],
+                                            phone=request['phone'],
+                                            license='0000000000',
+                                            category='아무것도 아님',
+                                            location='아무것도 아님',
+                                            is_ceo=False)
         return user
 
 

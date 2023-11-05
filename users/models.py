@@ -17,15 +17,12 @@ class Category(enum.Enum):
 
 
 class UserManager(BaseUserManager):
-    def create_user(self, email, password, **extra_fields):
+    def create_user(self, username, password=None, **extra_fields):
         """
         주어진 이메일, 비밀번호 등 개인정보로 인스턴스 생성
         """
-        if not email:
-            raise ValueError('Users must have an email address')
-        user = self.model(
-            **extra_fields
-        )
+
+        user = self.model(username=username, **extra_fields)
         user.set_password(password)
         user.save(using=self._db)
         return user

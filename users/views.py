@@ -33,7 +33,7 @@ class CheckLicenseView(APIView):
 
 
 class RegisterAPIView(APIView):
-    def post(self, request):
+    def post(self, request, is_ceo):
         serializer = CustomRegisterSerializer(data=request.data)  # 시리얼아리저 사용해서 유저 저장
         if serializer.is_valid():
             user = serializer.save(request=request)                    # 저장
