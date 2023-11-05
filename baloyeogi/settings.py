@@ -2,6 +2,10 @@ from pathlib import Path
 from datetime import timedelta
 import os
 import environ
+import pymysql
+
+
+pymysql.install_as_MySQLdb()
 
 ACCOUNT_EMAIL_VERIFICATION = 'none'
 ACCOUNT_EMAIL_REQUIRED = False
