@@ -3,7 +3,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from django.conf import settings
 import requests
-from .serializers import CustomRegisterSerializer
+from .serializers import CustomRegisterSerializer, CustomRenterRegisterSerializer
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
 API_KEY = settings.API_KEY
@@ -33,8 +33,14 @@ class CheckLicenseView(APIView):
 
 
 class RegisterAPIView(APIView):
-    def post(self, request):
-        serializer = CustomRegisterSerializer(data=request.data)  # 시리얼아리저 사용해서 유저 저장
+    def post(self, request,is_ceo):
+        # serializer = CustomRegisterSerializer(data=request.data)  # 시리얼아리저 사용해서 유저 저장
+
+        if is_ceo.lower() == 'true':
+            serializer = CustomRegisterSerializer(data=request.data)  # is_ceo가 True인 경우
+        else:
+            serializer = CustomRenterRegisterSerializer(data=request.data)
+
         if serializer.is_valid():
             user = serializer.save(request=request)                    # 저장
             # jwt 토큰 접근

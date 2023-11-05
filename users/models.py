@@ -17,11 +17,12 @@ class Category(enum.Enum):
 
 
 class UserManager(BaseUserManager):
-    def create_user(self, password, **extra_fields):
+    def create_user(self, username, password=None, **extra_fields):
         """
         주어진 이메일, 비밀번호 등 개인정보로 인스턴스 생성
         """
-        user = self.model(**extra_fields)
+
+        user = self.model(username=username, **extra_fields)
         user.set_password(password)
         user.save(using=self._db)
         return user
@@ -58,10 +59,10 @@ class User(AbstractBaseUser, PermissionsMixin):
     # document = models.FileField(upload_to='documents/')  # 문서 파일
     category = models.CharField(max_length=128, choices=Category.choices())
     location = models.TextField()  # 위치
-    is_ceo = models.BooleanField(default=True)
+    is_ceo = models.BooleanField(default=False)
 
 
-    # REQUIRED_FIELDS = []
+    REQUIRED_FIELDS = []
     USERNAME_FIELD = 'username'
 
     objects = UserManager()
