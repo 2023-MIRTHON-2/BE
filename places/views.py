@@ -43,9 +43,9 @@ class PlaceListView(APIView):
         elif category == 'all':
             places = Place.objects.filter(location__in=location.split(','))
         elif location == 'all':
-            places = Place.objects.filter(category__in=category.split(','))
+            places = Place.objects.filter(business__in=category.split(','))
         else:
-            places = Place.objects.filter(category__in=category.split(','), location__in=location.split(','))
+            places = Place.objects.filter(business__in=category.split(','), location__in=location.split(','))
         serializer = PlaceListSerializer(places, many=True)
         return Response(serializer.data)
     # 위 코드는 다음과 같은 url을 받을 수 있다.

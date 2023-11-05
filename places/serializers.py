@@ -7,13 +7,13 @@ from users.models import User
 
 class PlaceListSerializer(serializers.ModelSerializer):
     class Meta:
-        fields = ['id', 'placeName', 'placeImageUrl', 'category', 'location', 'article', 'cost']
+        fields = ['id', 'placeName', 'placeImageUrl', 'business', 'location', 'article', 'cost']
 
     Meta.model = Place
     id = serializers.IntegerField(read_only=True)
     placeName = serializers.CharField()
     placeImageUrl = serializers.CharField()
-    category = serializers.CharField()
+    business = serializers.CharField()
     location = serializers.CharField()
     article = serializers.CharField()
     cost = serializers.CharField()
