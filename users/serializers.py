@@ -18,38 +18,23 @@ class CustomRegisterSerializer(RegisterSerializer):
 
     def create(self, request):
         is_ceo = request.data.get('is_ceo', True)
-        print("is_ceo value:", is_ceo)
 
         if is_ceo:
-            user = User(
-                        # username=request.data['username'],
-                        # realname=request.data['realname'],
-                        # phone=request.data['phone'],
-                        # license=request.data['license'],
-                        # category=request.data['category'],
-                        # location=request.data['location'],
-                        # is_ceo=request.data['is_ceo']
+            user = User.objects.create_user(
                         **request
                         )
 
         else:
-            license = 'default_license_value'
-            category = 'default_category_value'
-            location = 'default_location_value'
-
-            user = User(username=request.data['username'],
+            user = User.objects.create_user(
+                        username=request.data['username'],
                         realname=request.data['realname'],
                         phone=request.data['phone'],
-                        license=license,
-                        category=category,
-                        location=location,
                         is_ceo=request.data['is_ceo']
                         )
 
-        print(user)
 
-        user.set_password(request.data['password'])
-        user.save()
+        # user.set_password(request.data['password'])
+        # user.save()
         return user
 
 
