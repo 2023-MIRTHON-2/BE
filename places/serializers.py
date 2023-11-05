@@ -19,3 +19,9 @@ class PlaceListSerializer(serializers.ModelSerializer):
     article = serializers.CharField()
     cost = serializers.CharField()
 
+
+class PlaceDeleteSerializer(serializers.ModelSerializer):
+    class Meta:
+        fields = ['id']
+    Meta.model = Place
+    id = serializers.IntegerField(read_only=True)

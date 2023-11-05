@@ -1,3 +1,4 @@
+from django.shortcuts import get_object_or_404
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 
@@ -15,7 +16,6 @@ class PlaceListView(APIView):
         serializer = PlaceListSerializer(places, many=True)
         return Response(serializer.data)
 
-    @swagger_auto_schema(request_body=PlaceListSerializer)
     def post(self, request):
         serializer = PlaceListSerializer(data=request.data)
         if serializer.is_valid():
@@ -23,7 +23,12 @@ class PlaceListView(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(status=status.HTTP_404_NOT_FOUND)
 
-    def delete(self, request):
-        place = Place.objects.get(id=request.data['id'])
+
+
+
+class PlaceDetailView(APIView):
+    @swagger_auto_schema(request_body=PlaceListSerializer)
+    def delete(self, request, post_id):
+        place = get_object_or_404(Place, pk=post_id)
         place.delete()
-        return Response(status=status.HTTP_200_OK)
+        return Response({'message': '삭제되었습니다.'}, status=status.HTTP_204_NO_CONTENT)
