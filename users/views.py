@@ -3,13 +3,8 @@ from rest_framework.response import Response
 from rest_framework import status
 from django.conf import settings
 import requests
-from .models import User, Category
-from rest_framework import serializers
-
-from .serializers import get_register_serializer
-
-from .serializers import CustomRegisterSerializer, CustomRenterRegisterSerializer
-from dj_rest_auth.registration.serializers import RegisterSerializer
+from .serializers import CustomRegisterSerializer
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
 API_KEY = settings.API_KEY
 
@@ -37,43 +32,35 @@ class CheckLicenseView(APIView):
             return Response({'error': 'API 호출 중 오류 발생'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
+class RegisterAPIView(APIView):
+    def post(self, request):
+        serializer = CustomRegisterSerializer(data=request.data)  # 시리얼아리저 사용해서 유저 저장
+        if serializer.is_valid():
+            user = serializer.save(request=request)                    # 저장
+            # jwt 토큰 접근
+            token = TokenObtainPairSerializer.get_token(user)
+            refresh_token = str(token)
+            access_token = str(token.access_token)
+            res = Response(
+                {
+                    "user": serializer.data,
+                    "message": "register success",
+                    "token": {
+                        "access": access_token,
+                        "refresh": refresh_token,
+                    },
+                },
+                status=status.HTTP_200_OK
+            )
+            # jwt 토큰을 받아서 쿠키에 저장
+            res.set_cookie("access", access_token, httponly=True)   # httponly=True : JavaScript로 쿠키를 조회할 수 없게 함
+            res.set_cookie("refresh", refresh_token, httponly=True)     # XSS로부터 안전해지지만, CSRF로부터 취약해짐 => CSRF 토큰을 같이 사용해야 함
+            return res
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 
-class CustomRegisterView(APIView):
-#     def get_serializer_class(self):
-#         # URL에서 "registration_type" 파라미터를 가져옵니다.
-#         registration_type = self.request.query_params.get('registration_type')
-#
-#         # "registration_type"이 "renter"인 경우 Renter에 필요한 필드를 사용하는 시리얼라이저를 반환합니다.
-#         if registration_type == "renter":
-#             return CustomRenterRegisterSerializer
-#
-#         # 기본적으로는 CEO에 필요한 필드를 사용하는 시리얼라이저를 반환합니다.
-#         return CustomRegisterSerializer
-#
-#     def post(self, request, *args, **kwargs):
-#         serializer_class = self.get_serializer_class()
-#         serializer = serializer_class(data=request.data)
-#         if serializer.is_valid():
-#             user = serializer.save()
-#             return Response({'message': 'Registration successful', 'user_id': user.id})
-#         return Response(serializer.errors, status=400)
 
-    def registration_view(request, registration_type):
-        # registration_type에 따른 직렬라이저를 얻습니다.
-        serializer_class = get_register_serializer(registration_type)
 
-        if serializer_class is None:
-            return Response({'error': 'Invalid registration type'}, status=400)
 
-        if request.method == 'POST':
-            # 직렬라이저를 사용하여 요청 데이터를 처리합니다.
-            serializer = serializer_class(data=request.data)
-            if serializer.is_valid():
-                user = serializer.save()
-                return Response({'message': 'Registration successful', 'user_id': user.id})
-            else:
-                return Response(serializer.errors, status=400)
 
-        return Response({'error': 'Unsupported HTTP method'}, status=400)

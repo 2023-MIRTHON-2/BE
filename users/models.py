@@ -42,6 +42,15 @@ class UserManager(BaseUserManager):
 
 
 class User(AbstractBaseUser, PermissionsMixin):
+    # username = models.CharField(max_length=128, unique=True)  # 아이디
+    # realname = models.CharField(max_length=128)  # 실명
+    # phone = models.CharField(max_length=128)  # 전화번호
+    # license = models.CharField(max_length=10, default="license")  # 사업자번호, 수정됨
+    # # document = models.FileField(upload_to='documents/')  # 문서 파일
+    # category = models.CharField(max_length=128, choices=Category.choices(), default="요식업")
+    # location = models.TextField(default="서울")  # 위치
+    # is_ceo = models.BooleanField(default=True)
+
     username = models.CharField(max_length=128, unique=True)  # 아이디
     realname = models.CharField(max_length=128)  # 실명
     phone = models.CharField(max_length=128)  # 전화번호
@@ -49,8 +58,10 @@ class User(AbstractBaseUser, PermissionsMixin):
     # document = models.FileField(upload_to='documents/')  # 문서 파일
     category = models.CharField(max_length=128, choices=Category.choices())
     location = models.TextField()  # 위치
+    is_ceo = models.BooleanField(default=True)
 
-    REQUIRED_FIELDS = []
+
+    # REQUIRED_FIELDS = []
     USERNAME_FIELD = 'username'
 
     objects = UserManager()
@@ -58,8 +69,8 @@ class User(AbstractBaseUser, PermissionsMixin):
     email = None
     email_verified = None
 
-    class Meta:
-        db_table = 'users'
+    # class Meta:
+    #     db_table = 'users'
 
     def __str__(self):
         return self.username

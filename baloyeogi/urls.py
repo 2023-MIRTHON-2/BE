@@ -35,7 +35,7 @@ urlpatterns = [
     path('users/', include('users.urls')),
     path('places/', include('places.urls')),
     path('dj/', include('dj_rest_auth.urls')),
-   path('dj/signup/<str:registration_type>/', include('dj_rest_auth.registration.urls')),
+    path('dj/signup/', include('dj_rest_auth.registration.urls')),
     # path('dj/signup/<str:registration_type>/', CustomRegisterView.as_view(),  name='custom_register'),
 
 
