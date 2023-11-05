@@ -1,11 +1,8 @@
 from django.urls import path
-from .views import FilterPlaceListView, MakePlaceView
-
+from .views import *
 
 app_name = 'places'
 
 urlpatterns = [
-    path('<str:location>/<str:category>/', FilterPlaceListView.as_view()),
-    path('make/', MakePlaceView.as_view()),
-
+    path('', PlaceListView.as_view(), name='place_list'),
 ]

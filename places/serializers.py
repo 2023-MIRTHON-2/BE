@@ -3,17 +3,17 @@ from rest_framework import serializers
 from .models import Place
 
 
-class DetailPlaceSerializer(serializers.ModelSerializer):
-    presidentId = serializers.CharField(source='presidentId.username', read_only=True)
+class PlaceListSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Place
-        fields = ['id', 'presidentId', 'placeName', 'placeImageUrl', 'licenseNum', 'category', 'location', 'article',
-                  'cost', 'startDate', 'endDate', 'about']
+        fields = ['id', 'placeName', 'placeImageUrl', 'category', 'location', 'article', 'cost']
 
+    Meta.model = Place
+    id = serializers.IntegerField(read_only=True)
+    placeName = serializers.CharField()
+    placeImageUrl = serializers.CharField()
+    category = serializers.CharField()
+    location = serializers.CharField()
+    article = serializers.CharField()
+    cost = serializers.CharField()
 
-# 메인페이지용 공간 정보 리스트 조회(location, category, placeName, placeImageUrl. cost)
-class PlaceSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Place
-        fields = ['location', 'category', 'placeName', 'placeImageUrl', 'cost']
 

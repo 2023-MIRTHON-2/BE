@@ -25,14 +25,13 @@ class Place(models.Model):
     licenseNum = models.CharField(max_length=100)
     # lease = models.FileField(upload_to='documents/')
     category = models.CharField(max_length=128, choices=Category.choices())
-    location = models.TextField()
-    article = models.TextField()
+    location = models.CharField(max_length=100)
+    article = models.TextField() # 사업에 대한 설명
     cost = models.CharField(max_length=100)
     startDate = models.DateField(default=datetime.date.today)
     endDate = models.DateField(default=datetime.date.today)
-    about = models.TextField()  # 사업에 대한 설명
     # 들어온 사업 계획서
 
     def __str__(self):
-        return self.id
+        return self.placeName
 
