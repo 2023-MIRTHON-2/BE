@@ -17,11 +17,15 @@ class Category(enum.Enum):
 
 
 class UserManager(BaseUserManager):
-    def create_user(self, password, **extra_fields):
+    def create_user(self, email, password, **extra_fields):
         """
         주어진 이메일, 비밀번호 등 개인정보로 인스턴스 생성
         """
-        user = self.model(**extra_fields)
+        if not email:
+            raise ValueError('Users must have an email address')
+        user = self.model(
+            **extra_fields
+        )
         user.set_password(password)
         user.save(using=self._db)
         return user
@@ -31,11 +35,13 @@ class UserManager(BaseUserManager):
         주어진 이메일, 비밀번호 등 개인정보로 User 인스턴스 생성
         단, 최상위 사용자이므로 권한을 부여
         """
-        superuser = self.create_user(password=password)
+        superuser = self.create_user(
+            password=password,
+        )
 
-        # superuser.is_staff = True
-        # superuser.is_superuser = True
-        # superuser.is_active = True
+        superuser.is_staff = True
+        superuser.is_superuser = True
+        superuser.is_active = True
 
         superuser.save(using=self._db)
         return superuser
@@ -60,8 +66,6 @@ class User(AbstractBaseUser, PermissionsMixin):
     location = models.TextField()  # 위치
     is_ceo = models.BooleanField(default=True)
 
-
-    # REQUIRED_FIELDS = []
     USERNAME_FIELD = 'username'
 
     objects = UserManager()
@@ -69,8 +73,6 @@ class User(AbstractBaseUser, PermissionsMixin):
     email = None
     email_verified = None
 
-    # class Meta:
-    #     db_table = 'users'
 
     def __str__(self):
         return self.username
