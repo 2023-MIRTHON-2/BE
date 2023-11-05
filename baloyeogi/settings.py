@@ -30,7 +30,7 @@ SECRET_KEY = 'django-insecure-9#)kx=re0+7_6!*cfo_kk=hel)i)#c^2x3m$_d)cq#!36ia3re
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['port-0-mirthon2-5yc2g32mlol3abmv.sel5.cloudtype.app', '127.0.0.1']
 
 # Application definition
 
@@ -220,7 +220,9 @@ REST_USE_JWT = True
 
 CORS_ORIGIN_WHITELIST = [
     "http://localhost:3000",
-    "http://127.0.0.1:8000",]
+    "http://127.0.0.1:8000",
+    "https://port-0-mirthon2-5yc2g32mlol3abmv.sel5.cloudtype.app"
+]
 
 CORS_ALLOW_CREDENTIALS = True
 CORS_ORIGIN_ALLOW_ALL = True
