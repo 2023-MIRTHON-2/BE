@@ -4,10 +4,12 @@ from rest_framework import serializers
 from dj_rest_auth.registration.serializers import RegisterSerializer
 from allauth.account.adapter import get_adapter
 class CustomRegisterSerializer(RegisterSerializer):
+
+
     realname = serializers.CharField(max_length=255)
     phone = serializers.CharField(max_length=50)
     license = serializers.CharField(max_length=50)
-    category = serializers.CharField(max_length=50)
+    category = serializers.CharField(max_length=128)
     location = serializers.CharField(max_length=255)
     is_ceo = serializers.BooleanField(default=True)
 
