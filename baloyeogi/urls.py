@@ -34,9 +34,10 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('users/', include('users.urls')),
     path('places/', include('places.urls')),
+    path('plans/', include('plans.urls')),
     path('dj/', include('dj_rest_auth.urls')),
     path('dj/signup/', include('dj_rest_auth.registration.urls')),
-    # path('dj/signup/<str:registration_type>/', CustomRegisterView.as_view(),  name='custom_register'),
+
 
 
     url(r'^swagger(?P<format>\.json|\.yaml)/$', schema_view.without_ui(cache_timeout=0), name='schema-json'),

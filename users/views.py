@@ -34,7 +34,7 @@ class CheckLicenseView(APIView):
 
 
 class RegisterAPIView(APIView):
-    parser_classes = [MultiPartParser, FormParser]
+    # parser_classes = [MultiPartParser, FormParser]
     def post(self, request,is_ceo):
         # serializer = CustomRegisterSerializer(data=request.data)  # 시리얼아리저 사용해서 유저 저장
 
