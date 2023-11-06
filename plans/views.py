@@ -1,8 +1,9 @@
-from rest_framework import generics
+from rest_framework import generics, status
 from django.shortcuts import get_object_or_404
-from .models import User, Place
-from .serializers import PlanSerializer
+from .models import User, Place, Plan
+from .serializers import PlanSerializer, PlanShowSerializer, PlanRenterShowSerializer, PlanCeoShowSerializer
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
 
 
 class PlanCreate(generics.CreateAPIView):
@@ -31,3 +32,52 @@ class PlanCreate(generics.CreateAPIView):
         # 'ceoId'와 'renterId'를 각각 CEO와 현재 로그인한 사용자로 설정하여 저장합니다.
         serializer.save(ceoId=ceo, renterId=renter, placeId=place)
 
+
+class PlanShow(generics.RetrieveAPIView):
+    serializer_class = PlanShowSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_object(self):
+        plan_id = self.kwargs.get('plan_Id')
+        return get_object_or_404(Plan, pk=plan_id)
+
+
+class PlanApprovalUpdate(generics.UpdateAPIView):
+    queryset = Plan.objects.all()
+    serializer_class = PlanSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_object(self):
+        plan_id = self.kwargs.get('plan_Id')
+        return get_object_or_404(Plan, pk=plan_id)
+
+    def patch(self, request, *args, **kwargs):
+        plan = self.get_object()
+        plan.approval = True
+        plan.save()
+        return Response({"status": "approval 필드 True 설정"}, status=status.HTTP_200_OK)
+
+
+class PlansRenterList(generics.ListAPIView):
+    serializer_class = PlanRenterShowSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        """
+        현재 로그인한 사용자가 renterId인 Plan 객체를 필터링합니다.
+        """
+        user = self.request.user
+        return Plan.objects.filter(renterId=user)
+
+
+class PlansCeoList(generics.ListAPIView):
+    serializer_class = PlanCeoShowSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        """
+        현재 로그인한 사용자가 CEO이며, URL 파라미터로 주어진 place_Id와 관련된 Plan 객체만 필터링합니다.
+        """
+        user = self.request.user
+        place_id = self.kwargs['place_Id']
+        return Plan.objects.filter(ceoId=user, placeId=place_id)
