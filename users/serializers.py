@@ -1,18 +1,28 @@
 from .models import User, Category
 from rest_framework import serializers
+import base64
 
 from dj_rest_auth.registration.serializers import RegisterSerializer
 from allauth.account.adapter import get_adapter
+
 class CustomRegisterSerializer(RegisterSerializer):
-
-
+    # 기존 필드 정의
     realname = serializers.CharField(max_length=255)
     phone = serializers.CharField(max_length=50)
     license = serializers.CharField(max_length=50)
-    document = serializers.BinaryField()
+    document = serializers.CharField()  # document는 base64 인코딩된 문자열을 받음
     category = serializers.CharField(max_length=128)
     location = serializers.CharField(max_length=255)
     is_ceo = serializers.BooleanField(default=True)
+
+    def validate_document(self, value):
+        # document 필드의 base64 데이터를 검증하고 디코딩합니다.
+        try:
+            # base64로 인코딩된 문자열을 확인합니다.
+            return base64.b64decode(value)  # 디코딩된 데이터를 반환합니다.
+        except TypeError:
+            raise serializers.ValidationError("이 문서 필드는 유효한 base64 인코딩 문자열이어야 합니다.")
+        # 문서 데이터가 유효하지 않으면 예외가 발생합니다.
 
     def get_cleaned_data(self):
         # super 클래스의 get_cleaned_data 메소드를 호출하여 기본 데이터를 가져옵니다.

@@ -37,25 +37,21 @@ class CheckLicenseView(APIView):
 
 class RegisterAPIView(APIView):
     def post(self, request, is_ceo):
-        # 클라이언트로부터 전송받은 base64 인코딩된 문서 데이터
-        base64_encoded_document = request.data.get('document')
-
-        # document 필드가 있는지 확인하고 base64 데이터를 디코딩합니다.
-        if base64_encoded_document:
-            # base64 데이터를 디코딩하여 바이너리 데이터로 변환
-            document_data = base64.b64decode(base64_encoded_document)
-            request.data['document'] = document_data
-
+        # Determine which serializer to use based on 'is_ceo' parameter
         if is_ceo.lower() == 'true':
             serializer = CustomRegisterSerializer(data=request.data)
         else:
             serializer = CustomRenterRegisterSerializer(data=request.data)
 
+        # Validate the data using the serializer
         if serializer.is_valid():
+            # If validation passes, save the user and generate tokens
             user = serializer.save(request=request)
             token = TokenObtainPairSerializer.get_token(user)
             refresh_token = str(token)
             access_token = str(token.access_token)
+
+            # Prepare the response
             res = Response(
                 {
                     "user": serializer.data,
@@ -67,10 +63,13 @@ class RegisterAPIView(APIView):
                 },
                 status=status.HTTP_200_OK
             )
+
+            # Set the tokens in cookies
             res.set_cookie("access", access_token, httponly=True)
             res.set_cookie("refresh", refresh_token, httponly=True)
             return res
 
+        # If validation fails, return the errors
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class CheckUsernameAPIView(APIView):
