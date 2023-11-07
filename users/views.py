@@ -1,11 +1,14 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework import status
 from django.conf import settings
 import requests
 from .serializers import CustomRegisterSerializer, CustomRenterRegisterSerializer
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
-
+from .models import User
+import base64
+from django.core.files.base import ContentFile
 API_KEY = settings.API_KEY
 
 
@@ -33,20 +36,22 @@ class CheckLicenseView(APIView):
 
 
 class RegisterAPIView(APIView):
-    def post(self, request,is_ceo):
-        # serializer = CustomRegisterSerializer(data=request.data)  # 시리얼아리저 사용해서 유저 저장
-
+    def post(self, request, is_ceo):
+        # Determine which serializer to use based on 'is_ceo' parameter
         if is_ceo.lower() == 'true':
-            serializer = CustomRegisterSerializer(data=request.data)  # is_ceo가 True인 경우
+            serializer = CustomRegisterSerializer(data=request.data)
         else:
             serializer = CustomRenterRegisterSerializer(data=request.data)
 
+        # Validate the data using the serializer
         if serializer.is_valid():
-            user = serializer.save(request=request)                    # 저장
-            # jwt 토큰 접근
+            # If validation passes, save the user and generate tokens
+            user = serializer.save(request=request)
             token = TokenObtainPairSerializer.get_token(user)
             refresh_token = str(token)
             access_token = str(token.access_token)
+
+            # Prepare the response
             res = Response(
                 {
                     "user": serializer.data,
@@ -58,14 +63,22 @@ class RegisterAPIView(APIView):
                 },
                 status=status.HTTP_200_OK
             )
-            # jwt 토큰을 받아서 쿠키에 저장
-            res.set_cookie("access", access_token, httponly=True)   # httponly=True : JavaScript로 쿠키를 조회할 수 없게 함
-            res.set_cookie("refresh", refresh_token, httponly=True)     # XSS로부터 안전해지지만, CSRF로부터 취약해짐 => CSRF 토큰을 같이 사용해야 함
+
+            # Set the tokens in cookies
+            res.set_cookie("access", access_token, httponly=True)
+            res.set_cookie("refresh", refresh_token, httponly=True)
             return res
+
+        # If validation fails, return the errors
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-
-
+class CheckUsernameAPIView(APIView):
+    # 사용자 이름 중복 확인
+    def get(self, request, username):
+        if User.objects.filter(username=username).exists():
+            return Response({'error': '이미 존재하는 사용자 이름입니다.'}, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            return Response({'message': '사용 가능한 사용자 이름입니다.', 'available': 1}, status=status.HTTP_200_OK)
 
 
 
