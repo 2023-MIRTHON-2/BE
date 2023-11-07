@@ -9,7 +9,7 @@ class CustomRegisterSerializer(RegisterSerializer):
     realname = serializers.CharField(max_length=255)
     phone = serializers.CharField(max_length=50)
     license = serializers.CharField(max_length=50)
-    # document = serializers.FileField(upload_to='documents/')
+    # document = serializers.SerializerMethodField()
     category = serializers.CharField(max_length=128)
     location = serializers.CharField(max_length=255)
     is_ceo = serializers.BooleanField(default=True)

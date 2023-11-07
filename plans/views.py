@@ -1,14 +1,24 @@
-from rest_framework import generics, status
+from rest_framework import generics, status, permissions
 from django.shortcuts import get_object_or_404
 from .models import User, Place, Plan
-from .serializers import PlanSerializer, PlanShowSerializer, PlanRenterShowSerializer, PlanCeoShowSerializer
+from .serializers import PlanSerializer, PlanShowSerializer, PlanRenterShowSerializer, PlanCeoShowSerializer, ContractShowSerializer
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 
+class IsAuthenticatedAndNotCEO(permissions.BasePermission):
+    """
+    커스텀 권한을 검사하여, 인증된 사용자 중 is_ceo가 False인 사용자만 허용합니다.
+    """
+
+    def has_permission(self, request, view):
+        # 사용자가 로그인했는지와 is_ceo가 False인지 확인합니다.
+        return request.user and request.user.is_authenticated and not request.user.is_ceo
+
+
 class PlanCreate(generics.CreateAPIView):
     serializer_class = PlanSerializer
-    permission_classes = [IsAuthenticated]  # 로그인한 사용자만 접근 가능하도록 설정
+    permission_classes = [IsAuthenticatedAndNotCEO]  # 로그인한 사용자만 접근 가능하도록 설정
 
     def get_serializer_context(self):
 
@@ -81,3 +91,12 @@ class PlansCeoList(generics.ListAPIView):
         user = self.request.user
         place_id = self.kwargs['place_Id']
         return Plan.objects.filter(ceoId=user, placeId=place_id)
+
+
+class ContractShow(generics.RetrieveAPIView):
+    serializer_class = ContractShowSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_object(self):
+        plan_id = self.kwargs.get('plan_Id')
+        return get_object_or_404(Plan, pk=plan_id)
