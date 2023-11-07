@@ -8,4 +8,5 @@ urlpatterns = [
     # path("register/", RegisterAPIView.as_view()),
 
     path("register/<str:is_ceo>/", RegisterAPIView.as_view()),
+    path('check-username/<str:username>/', CheckUsernameAPIView.as_view(), name='check-username'),
 ]
