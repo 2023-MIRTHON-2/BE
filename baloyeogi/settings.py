@@ -7,6 +7,7 @@ import pymysql
 
 pymysql.install_as_MySQLdb()
 
+
 ACCOUNT_EMAIL_VERIFICATION = 'none'
 ACCOUNT_EMAIL_REQUIRED = False
 ACCOUNT_USERNAME_REQUIRED = True
@@ -48,6 +49,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'users',
     'places',
+    'plans',
 
     # rest framework 관련
     'rest_framework',
@@ -242,3 +244,4 @@ CORS_ORIGIN_WHITELIST = [
 
 CORS_ALLOW_CREDENTIALS = True
 CORS_ORIGIN_ALLOW_ALL = True
+
