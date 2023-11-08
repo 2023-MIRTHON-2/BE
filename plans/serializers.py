@@ -3,49 +3,54 @@ from .models import Plan
 
 
 class PlanSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(read_only=True)
     ceoId = serializers.CharField(source='ceoId.username', read_only=True)
     renterId = serializers.CharField(source='renterId.username', read_only=True)
     placeId = serializers.CharField(source='placeId.placeName', read_only=True)
 
     class Meta:
         model = Plan
-        fields = ['ceoId', 'renterId', 'placeId', 'name', 'phone', 'startDate', 'endDate', 'category', 'information', 'inquiry',
+        fields = ['id', 'ceoId', 'renterId', 'placeId', 'name', 'phone', 'startDate', 'endDate', 'bussiness', 'information', 'inquiry',
                   'received_date', 'approval']
 
 
 class PlanShowSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(read_only=True)
     class Meta:
         model = Plan
-        fields = ['name', 'phone', 'startDate', 'endDate', 'category', 'information', 'inquiry']
+        fields = ['id', 'name', 'phone', 'startDate', 'endDate', 'bussiness', 'information', 'inquiry']
 
 
 class PlanRenterShowSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(read_only=True)
     placeId = serializers.CharField(source='placeId.placeName', read_only=True)
     received_date = serializers.DateTimeField(format='%Y-%m-%d', read_only=True)
 
     class Meta:
         model = Plan
-        fields = ['placeId', 'startDate', 'endDate', 'received_date', 'approval']
+        fields = ['id', 'placeId', 'startDate', 'endDate', 'received_date', 'approval']
 
 
 class PlanCeoShowSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(read_only=True)
     placeId = serializers.CharField(source='placeId.placeName', read_only=True)
     renterId = serializers.CharField(source='renterId.username', read_only=True)
     received_date = serializers.DateTimeField(format='%Y-%m-%d', read_only=True)
 
     class Meta:
         model = Plan
-        fields = ['renterId', 'placeId', 'startDate', 'endDate', 'received_date']
+        fields = ['id', 'renterId', 'placeId', 'startDate', 'endDate', 'received_date']
 
 
 class ContractShowSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(read_only=True)
     ceoId = serializers.CharField(source='ceoId.username', read_only=True)
     ceoPhone = serializers.SerializerMethodField()
-    ceoCategory = serializers.SerializerMethodField()
+    ceoBussiness = serializers.SerializerMethodField()
     ceoLocation = serializers.SerializerMethodField()
     renterId = serializers.CharField(source='renterId.username', read_only=True)
     renterPhone = serializers.SerializerMethodField()
-    renterCategory = serializers.SerializerMethodField()
+    renterBussiness = serializers.SerializerMethodField()
     placeId = serializers.CharField(source='placeId.placeName', read_only=True)
     placeStartDate = serializers.SerializerMethodField()
     placeEndDate = serializers.SerializerMethodField()
@@ -54,17 +59,17 @@ class ContractShowSerializer(serializers.ModelSerializer):
     def get_ceoPhone(self, obj):
         return obj.ceoId.phone if obj.ceoId else None
 
-    def get_ceoCategory(self, obj):
-        return obj.ceoId.category if obj.ceoId else None
+    def get_ceoBussiness(self, obj):
+        return obj.placeId.bussiness if obj.placeId else None
 
     def get_ceoLocation(self, obj):
-        return obj.ceoId.location if obj.ceoId else None
+        return obj.placeId.location if obj.placeId else None
 
     def get_renterPhone(self, obj):
         return obj.renterId.phone if obj.renterId else None
 
-    def get_renterCategory(self, obj):
-        return obj.category if obj.renterId else None
+    def get_renterBussiness(self, obj):
+        return obj.bussiness if obj.renterId else None
 
     def get_placeStartDate(self, obj):
         return obj.placeId.startDate if obj.placeId else None
@@ -78,8 +83,8 @@ class ContractShowSerializer(serializers.ModelSerializer):
     class Meta:
         model = Plan  # 실제 모델 이름으로 교체해야 합니다.
         fields = [
-            'ceoId', 'ceoPhone', 'ceoCategory', 'ceoLocation',
-            'renterId', 'renterPhone', 'renterCategory',
+            'id', 'ceoId', 'ceoPhone', 'ceoBussiness', 'ceoLocation',
+            'renterId', 'renterPhone', 'renterBussiness',
             'placeId', 'placeStartDate', 'placeEndDate', 'placeCost'
         ]
-        read_only_fields = ('ceoId', 'renterId', 'placeId')
+        read_only_fields = ('id', 'ceoId', 'renterId', 'placeId')

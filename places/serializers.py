@@ -8,13 +8,13 @@ from users.models import User
 class PlaceListSerializer(serializers.ModelSerializer):
     presidentId = serializers.CharField(source='presidentId.username', read_only=True)
     class Meta:
-        fields = ['id', 'presidentId', 'placeName', 'placeImageUrl', 'category', 'location', 'article', 'cost']
+        fields = ['id', 'presidentId', 'placeName', 'placeImageUrl', 'bussiness', 'location', 'article', 'cost']
 
     Meta.model = Place
     id = serializers.IntegerField(read_only=True)
     placeName = serializers.CharField()
     placeImageUrl = serializers.CharField()
-    category = serializers.CharField()
+    bussiness = serializers.CharField()
     location = serializers.CharField()
     article = serializers.CharField()
     cost = serializers.CharField()

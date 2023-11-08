@@ -24,7 +24,7 @@ class Place(models.Model):
     placeImageUrl = models.CharField(max_length=100)
     licenseNum = models.CharField(max_length=100)
     # lease = models.FileField(upload_to='documents/')
-    category = models.CharField(max_length=128, choices=Category.choices())
+    bussiness = models.CharField(max_length=128, choices=Category.choices())
     location = models.CharField(max_length=100)
     article = models.TextField() # 사업에 대한 설명
     cost = models.CharField(max_length=100)

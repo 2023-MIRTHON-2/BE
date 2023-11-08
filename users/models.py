@@ -43,14 +43,10 @@ class UserManager(BaseUserManager):
 
 
 class User(AbstractBaseUser, PermissionsMixin):
-
+    id = models.AutoField(primary_key=True)
     username = models.CharField(max_length=128, unique=True)  # 아이디
     realname = models.CharField(max_length=128)  # 실명
     phone = models.CharField(max_length=128)  # 전화번호
-    license = models.CharField(max_length=10)  # 사업자번호, 수정됨
-    document = models.BinaryField()  # 문서 파일
-    category = models.CharField(max_length=128, choices=Category.choices())
-    location = models.TextField()  # 위치
     is_ceo = models.BooleanField(default=False)
 
 
