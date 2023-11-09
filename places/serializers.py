@@ -34,7 +34,7 @@ class ImpossibleDateSerializer(serializers.ModelSerializer):
 
 
 class PlaceSerializer(serializers.ModelSerializer):
-    placeImageUrl = PlaceImageSerializer(many=True, read_only=True, source='placeImageUrl_set')
+    placeImageUrl = PlaceImageSerializer(many=True, read_only=True, source='placeimageurl_set')
     impossibleDate_list = ImpossibleDateSerializer(many=True, read_only=True, source='impossibledate_set')
     ceoId = ReadOnlyField(source='ceoId.id')
 
