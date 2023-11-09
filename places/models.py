@@ -26,7 +26,7 @@ class Place(models.Model):
     ceoId = models.ForeignKey(User, on_delete=models.CASCADE)
     placeName = models.CharField(max_length=100)
     licenseNum = models.CharField(max_length=100)
-    lease = models.FileField(upload_to='lease/', null=True)
+    lease = models.ImageField(upload_to='lease/', blank=True, null=True)
     business = models.CharField(max_length=128, choices=Category.choices())
     location = models.CharField(max_length=100)
     article = models.TextField()  # 사업에 대한 설명
@@ -41,7 +41,7 @@ class Place(models.Model):
 class PlaceImage(models.Model):
     id = models.AutoField(primary_key=True)
     placeId = models.ForeignKey(Place, on_delete=models.CASCADE)
-    placeImage = models.ImageField()
+    placeImage = models.ImageField(upload_to='placeImage/', blank=True, null=True)
 
     def __str__(self):
         return self.placeImage

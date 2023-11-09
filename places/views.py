@@ -12,6 +12,13 @@ import base64
 from django.core.files.base import ContentFile
 
 
+class PlaceView(APIView):
+    def get(self, request):
+        places = Place.objects.all()
+        serializer = PlaceListSerializer(places, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
 class PlaceListView(APIView):
     def get(self, request, business, location):
         if business == 'total' and location == 'total':
@@ -27,6 +34,8 @@ class PlaceListView(APIView):
 
 
 class PlaceDetailView(APIView):
+    parser_classes = MultiPartParser
+
     def get(self, request, place_id):
         place = get_object_or_404(Place, pk=place_id)
         serializer = PlaceSerializer(place)
