@@ -41,10 +41,10 @@ class Place(models.Model):
 class PlaceImage(models.Model):
     id = models.AutoField(primary_key=True)
     placeId = models.ForeignKey(Place, on_delete=models.CASCADE)
-    placeImage = models.ImageField(upload_to='placeImage/', blank=True, null=True)
+    placeImageUrl = models.ImageField(upload_to='placeImage/', blank=True, null=True)
 
     def __str__(self):
-        return self.placeImage
+        return self.placeImageUrl
 
 
 class ImpossibleDate(models.Model):
