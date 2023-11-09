@@ -3,6 +3,7 @@ from rest_framework import serializers
 from rest_framework.fields import ReadOnlyField
 from .models import Place, ImpossibleDate, PlaceImage
 from users.models import User
+import time
 
 
 class PlaceImageSerializer(serializers.ModelSerializer):
@@ -12,17 +13,11 @@ class PlaceImageSerializer(serializers.ModelSerializer):
 
 
 class PlaceListSerializer(serializers.ModelSerializer):
+    placeImage = PlaceImageSerializer(read_only=True, source='placeimage_set.first')
+
     class Meta:
         model = Place
         fields = ['id', 'placeName', 'placeImage', 'business', 'location', 'article', 'cost']
-
-    id = serializers.IntegerField(read_only=True)
-    placeName = serializers.CharField()
-    placeImage = PlaceImageSerializer(source='placeImage_set', many=False, read_only=True)
-    business = serializers.CharField()
-    location = serializers.CharField()
-    article = serializers.CharField()
-    cost = serializers.CharField()
 
 
 class ImpossibleDateSerializer(serializers.ModelSerializer):
@@ -32,20 +27,22 @@ class ImpossibleDateSerializer(serializers.ModelSerializer):
 
 
 class PlaceSerializer(serializers.ModelSerializer):
-    placeImage_set = PlaceImageSerializer(many=True, read_only=True)
-    impossibleDate_set = ImpossibleDateSerializer(many=True, read_only=True)
+    placeImage_list = PlaceImageSerializer(many=True, read_only=True, source='placeimage_set')
+    impossibleDate_list = ImpossibleDateSerializer(many=True, read_only=True, source='impossibledate_set')
+    ceoId = ReadOnlyField(source='ceoId.id')
 
     class Meta:
         model = Place
-        fields = ['id', 'ceoId', 'placeName', 'placeImage_set', 'licenseNum', 'lease', 'business', 'location',
-                  'article', 'cost', 'impossibleDate_set']
+        fields = ['id', 'ceoId', 'placeName', 'placeImage_list', 'licenseNum', 'lease', 'business', 'location',
+                  'article', 'cost', 'impossibleDate_list']
 
-    def create(self, validated_date):
-        placeImage_set = self.context['request'].FILES.getlist('placeImage_set')
-        impossibleDate_set = self.context['request'].data.getlist('impossibleDate_set')
-        place = Place.objects.create(**validated_date)
-        for image in placeImage_set:
-            PlaceImage.objects.create(placeId=place, placeImage=image)
-        for date in impossibleDate_set:
-            ImpossibleDate.objects.create(placeId=place, impossibleDate=date)
+    def create(self, validated_data):
+        images_data = self.context.get('request').FILES  # 왜 noneType이지? -> context를 설정해줘야한다. 어떻게? -> view에서 serializer를 사용할 때 context를 설정해준다.
+        place = Place.objects.create(**validated_data)
+        for image_data in images_data.getlist('placeImage'):
+            PlaceImage.objects.create(placeId=place, placeImage=image_data)
+        for date_data in self.context.get('request').data.getlist('impossibleDate'):
+            ImpossibleDate.objects.create(placeId=place, impossibleDate=int(date_data))
+            # 예시: 1698883200
+
         return place

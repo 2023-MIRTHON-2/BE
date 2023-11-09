@@ -26,7 +26,7 @@ class Place(models.Model):
     ceoId = models.ForeignKey(User, on_delete=models.CASCADE)
     placeName = models.CharField(max_length=100)
     licenseNum = models.CharField(max_length=100)
-    lease = models.FileField('임대차 계약서', upload_to='lease/', blank=True)
+    lease = models.ImageField(upload_to='lease/', blank=True, null=True)
     business = models.CharField(max_length=128, choices=Category.choices())
     location = models.CharField(max_length=100)
     article = models.TextField()  # 사업에 대한 설명
@@ -37,26 +37,20 @@ class Place(models.Model):
     def __str__(self):
         return self.placeName
 
-    def get_filename(self):
-        return os.path.basename(self.lease.name)
-
 
 class PlaceImage(models.Model):
     id = models.AutoField(primary_key=True)
     placeId = models.ForeignKey(Place, on_delete=models.CASCADE)
-    placeImage = models.ImageField(upload_to='placeImage/')
+    placeImage = models.ImageField(upload_to='placeImage/', blank=True, null=True)
 
     def __str__(self):
         return self.placeImage
-
-    def get_filename(self):
-        return os.path.basename(self.placeImage.name)
 
 
 class ImpossibleDate(models.Model):
     id = models.AutoField(primary_key=True)
     placeId = models.ForeignKey(Place, on_delete=models.CASCADE)
-    impossibleDate = UnixDateTimeField(default=datetime.datetime.now)
+    impossibleDate = models.IntegerField()
 
     def __str__(self):
         return self.impossibleDate
