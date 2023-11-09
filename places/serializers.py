@@ -12,6 +12,12 @@ class PlaceImageSerializer(serializers.ModelSerializer):
         fields = ['placeImageUrl']
 
 
+class PlaceImageWithIdSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PlaceImage
+        fields = ['id', 'placeImageUrl']
+
+
 class PlaceListSerializer(serializers.ModelSerializer):
     # placeImageUrl = PlaceImageSerializer(read_only=True, source='placeimage_set.first') # object로 보내지 않고, 하나만 보낸다.
     placeImageUrl = serializers.SerializerMethodField('get_placeImageUrl')
@@ -32,7 +38,7 @@ class ImpossibleDateSerializer(serializers.ModelSerializer):
 
 
 class PlaceSerializer(serializers.ModelSerializer):
-    placeImageUrl = PlaceImageSerializer(many=True, read_only=True, source='placeimage_set')
+    placeImageUrl = PlaceImageWithIdSerializer(many=True, read_only=True, source='placeimage_set')
     impossibleDate_list = ImpossibleDateSerializer(many=True, read_only=True, source='impossibledate_set')
     ceoId = ReadOnlyField(source='ceoId.id')
 
