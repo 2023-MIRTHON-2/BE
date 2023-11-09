@@ -7,21 +7,7 @@ from .serializers import *
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
-
-
-class MakePlaceListView(APIView):
-
-    def get(self, request):
-        places = Place.objects.all()
-        serializer = PlaceListSerializer(places, many=True)
-        return Response(serializer.data)
-
-    def post(self, request):
-        serializer = PlaceListSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save(presidentId=request.user)
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(status=status.HTTP_404_NOT_FOUND)
+from rest_framework.viewsets import ModelViewSet
 
 
 class PlaceListView(APIView):
@@ -41,11 +27,13 @@ class PlaceListView(APIView):
 class PlaceDetailView(APIView):
     def get(self, request, place_id):
         place = get_object_or_404(Place, pk=place_id)
-        serializer = PlaceDetailSerializer(place)
+        serializer = PlaceSerializer(place)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-    @swagger_auto_schema(request_body=PlaceDetailSerializer)
-    def delete(self, request, place_id):
-        place = get_object_or_404(Place, pk=place_id)
-        place.delete()
-        return Response({'message': '삭제되었습니다.'}, status=status.HTTP_204_NO_CONTENT)
+    @swagger_auto_schema(request_body=PlaceSerializer)
+    def post(self, request):
+        serializer = PlaceSerializer(data=request.data, context={'request': request})
+        if serializer.is_valid():
+            serializer.save(ceoId=request.user)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(status=status.HTTP_404_NOT_FOUND)
