@@ -31,6 +31,7 @@ class Place(models.Model):
     location = models.CharField(max_length=100)
     article = models.TextField()  # 사업에 대한 설명
     cost = models.CharField(max_length=100)
+
     # 들어온 사업 계획서
 
     def __str__(self):
@@ -59,4 +60,3 @@ class ImpossibleDate(models.Model):
 
     def __str__(self):
         return self.impossibleDate
-
