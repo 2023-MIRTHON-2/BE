@@ -21,10 +21,10 @@ class PlaceListSerializer(serializers.ModelSerializer):
         fields = ['id', 'placeName', 'placeImageUrl', 'business', 'location', 'article', 'cost']
 
     def get_placeImageUrl(self, obj):
-        placeImage = PlaceImage.objects.filter(placeId=obj).first()
-        if placeImage is None:
+        try:
+            return obj.placeimage_set.first().placeImageUrl
+        except AttributeError:
             return None
-        return placeImage.placeImageUrl
 
 
 class ImpossibleDateSerializer(serializers.ModelSerializer):
