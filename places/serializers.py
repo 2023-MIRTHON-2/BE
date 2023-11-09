@@ -7,12 +7,12 @@ from users.models import User
 
 class PlaceListSerializer(serializers.ModelSerializer):
     class Meta:
-        fields = ['id', 'placeName', 'placeImageUrl', 'business', 'location', 'article', 'cost']
+        fields = ['id', 'placeName', 'MainPlaceImage', 'business', 'location', 'article', 'cost']
 
     Meta.model = Place
     id = serializers.IntegerField(read_only=True)
     placeName = serializers.CharField()
-    placeImageUrl = serializers.CharField()
+    MainPlaceImage = serializers.ImageField()
     business = serializers.CharField()
     location = serializers.CharField()
     article = serializers.CharField()
@@ -28,23 +28,28 @@ class PlaceDeleteSerializer(serializers.ModelSerializer):
 
 class PlaceImageSerializer(serializers.ModelSerializer):
     class Meta:
-        fields = ['placeImage']
+        fields = ['id', 'placeImage']
     Meta.model = Place
-    placeImage = serializers.CharField()
+    id = serializers.IntegerField(read_only=True)
+    placeImage = serializers.ImageField()
 
 
 class PlaceDetailSerializer(serializers.ModelSerializer):
     class Meta:
-        fields = ['id', 'placeName', 'placeImageList', 'business', 'location', 'article', 'cost', 'startDate',
-                  'endDate']
+        fields = ['id', 'presidentId', 'placeName', 'placeImageUrl', 'licenseNum', 'lease', 'business', 'location',
+                  'article', 'cost', 'startDate', 'endDate', 'placeImage']
     Meta.model = Place
     id = serializers.IntegerField(read_only=True)
+    presidentId = serializers.PrimaryKeyRelatedField(read_only=True, default=serializers.CurrentUserDefault())
     placeName = serializers.CharField()
-    placeImageList = PlaceImageSerializer(many=True, read_only=True, source='placeimage_set')
+    placeImageUrl = serializers.CharField()
+    licenseNum = serializers.CharField()
+    lease = serializers.FileField()
     business = serializers.CharField()
     location = serializers.CharField()
     article = serializers.CharField()
     cost = serializers.CharField()
-    startDate = serializers.DateField()
-    endDate = serializers.DateField()
+    startDate = serializers.DateTimeField()
+    endDate = serializers.DateTimeField()
+    placeImage = PlaceImageSerializer(many=True, read_only=True)
 
