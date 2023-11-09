@@ -20,7 +20,7 @@ class PlaceListSerializer(serializers.ModelSerializer):
         model = Place
         fields = ['id', 'placeName', 'placeImageUrl', 'business', 'location', 'article', 'cost']
 
-    def get_placeImageUrl(self, obj):
+    def get_placeimageurl(self, obj):
         placeImage = PlaceImage.objects.filter(placeId=obj).first()
         if placeImage is None:
             return None
@@ -34,7 +34,7 @@ class ImpossibleDateSerializer(serializers.ModelSerializer):
 
 
 class PlaceSerializer(serializers.ModelSerializer):
-    placeImageUrl = PlaceImageSerializer(many=True, read_only=True, source='placeimageurl_set')
+    placeImageUrl = PlaceImageSerializer(many=True, read_only=True, source='placeimage_set')
     impossibleDate_list = ImpossibleDateSerializer(many=True, read_only=True, source='impossibledate_set')
     ceoId = ReadOnlyField(source='ceoId.id')
 
