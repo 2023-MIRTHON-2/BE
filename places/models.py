@@ -24,12 +24,12 @@ class Place(models.Model):
     id = models.AutoField(primary_key=True)
     presidentId = models.ForeignKey(User, on_delete=models.CASCADE)
     placeName = models.CharField(max_length=100)
-    placeImage = models.CharField(max_length=100) # 대표 이미지
+    placeImage = models.CharField(max_length=100)  # 대표 이미지
     licenseNum = models.CharField(max_length=100)
     lease = models.FileField('임대차 계약서', upload_to='lease/', blank=True)
     business = models.CharField(max_length=128, choices=Category.choices())
     location = models.CharField(max_length=100)
-    article = models.TextField() # 사업에 대한 설명
+    article = models.TextField()  # 사업에 대한 설명
     cost = models.CharField(max_length=100)
     startDate = UnixDateTimeField(default=datetime.date.today)
     endDate = UnixDateTimeField(default=datetime.date.today)
@@ -52,4 +52,3 @@ class PlaceImage(models.Model):
 
     def get_filename(self):
         return os.path.basename(self.placeImage.name)
-

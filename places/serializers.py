@@ -22,6 +22,7 @@ class PlaceListSerializer(serializers.ModelSerializer):
 class PlaceDeleteSerializer(serializers.ModelSerializer):
     class Meta:
         fields = ['id']
+
     Meta.model = Place
     id = serializers.IntegerField(read_only=True)
 
@@ -29,6 +30,7 @@ class PlaceDeleteSerializer(serializers.ModelSerializer):
 class PlaceImageSerializer(serializers.ModelSerializer):
     class Meta:
         fields = ['id', 'placeImage']
+
     Meta.model = Place
     id = serializers.IntegerField(read_only=True)
     placeImage = serializers.ImageField()
@@ -38,6 +40,7 @@ class PlaceDetailSerializer(serializers.ModelSerializer):
     class Meta:
         fields = ['id', 'presidentId', 'placeName', 'placeImageUrl', 'licenseNum', 'lease', 'business', 'location',
                   'article', 'cost', 'startDate', 'endDate', 'placeImage']
+
     Meta.model = Place
     id = serializers.IntegerField(read_only=True)
     presidentId = serializers.PrimaryKeyRelatedField(read_only=True, default=serializers.CurrentUserDefault())
@@ -52,4 +55,3 @@ class PlaceDetailSerializer(serializers.ModelSerializer):
     startDate = serializers.DateTimeField()
     endDate = serializers.DateTimeField()
     placeImage = PlaceImageSerializer(many=True, read_only=True)
-

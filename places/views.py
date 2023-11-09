@@ -49,4 +49,3 @@ class PlaceDetailView(APIView):
         place = get_object_or_404(Place, pk=place_id)
         place.delete()
         return Response({'message': '삭제되었습니다.'}, status=status.HTTP_204_NO_CONTENT)
-
