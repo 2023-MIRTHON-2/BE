@@ -1,5 +1,9 @@
 import enum
 import datetime
+import os
+import time
+
+from django_unixdatetimefield import UnixDateTimeField
 
 from django.db import models
 from users.models import User
@@ -19,19 +23,40 @@ class Category(enum.Enum):
 
 class Place(models.Model):
     id = models.AutoField(primary_key=True)
-    presidentId = models.ForeignKey(User, on_delete=models.CASCADE)
+    ceoId = models.ForeignKey(User, on_delete=models.CASCADE)
     placeName = models.CharField(max_length=100)
-    placeImageUrl = models.CharField(max_length=100)
     licenseNum = models.CharField(max_length=100)
-    # lease = models.FileField(upload_to='documents/')
-    bussiness = models.CharField(max_length=128, choices=Category.choices())
+    lease = models.FileField('임대차 계약서', upload_to='lease/', blank=True)
+    business = models.CharField(max_length=128, choices=Category.choices())
     location = models.CharField(max_length=100)
-    article = models.TextField() # 사업에 대한 설명
+    article = models.TextField()  # 사업에 대한 설명
     cost = models.CharField(max_length=100)
-    startDate = models.DateField(default=datetime.date.today)
-    endDate = models.DateField(default=datetime.date.today)
+
     # 들어온 사업 계획서
 
     def __str__(self):
         return self.placeName
 
+    def get_filename(self):
+        return os.path.basename(self.lease.name)
+
+
+class PlaceImage(models.Model):
+    id = models.AutoField(primary_key=True)
+    placeId = models.ForeignKey(Place, on_delete=models.CASCADE)
+    placeImage = models.ImageField(upload_to='placeImage/')
+
+    def __str__(self):
+        return self.placeImage
+
+    def get_filename(self):
+        return os.path.basename(self.placeImage.name)
+
+
+class ImpossibleDate(models.Model):
+    id = models.AutoField(primary_key=True)
+    placeId = models.ForeignKey(Place, on_delete=models.CASCADE)
+    impossibleDate = UnixDateTimeField(default=datetime.datetime.now)
+
+    def __str__(self):
+        return self.impossibleDate
