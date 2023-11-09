@@ -8,8 +8,6 @@ from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.parsers import MultiPartParser, FormParser
-import base64
-from django.core.files.base import ContentFile
 
 
 class PlaceView(APIView):
@@ -34,18 +32,18 @@ class PlaceListView(APIView):
 
 
 class PlaceDetailView(APIView):
-    parser_classes = MultiPartParser
+    parser_classes = (MultiPartParser, FormParser)
 
     def get(self, request, place_id):
         place = get_object_or_404(Place, pk=place_id)
         serializer = PlaceSerializer(place)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-    @swagger_auto_schema(request_body=PlaceSerializer)
+    @swagger_auto_schema(request_body=PlaceSerializer) # 이미지를 여러개 받을 수도 있다.
     def post(self, request):
-        data = request.data
-        serializer = PlaceSerializer(data=data, context={'request': request})
+        serializer = PlaceSerializer(data=request.data, context={'request': request})
         if serializer.is_valid():
             serializer.save(ceoId=request.user)
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(status=status.HTTP_404_NOT_FOUND)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        print(serializer.errors)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

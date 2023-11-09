@@ -50,7 +50,7 @@ class PlaceImage(models.Model):
 class ImpossibleDate(models.Model):
     id = models.AutoField(primary_key=True)
     placeId = models.ForeignKey(Place, on_delete=models.CASCADE)
-    impossibleDate = UnixDateTimeField(default=datetime.datetime.now)
+    impossibleDate = models.IntegerField()
 
     def __str__(self):
         return self.impossibleDate
