@@ -7,7 +7,9 @@ from .serializers import *
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework.viewsets import ModelViewSet
+from rest_framework.parsers import MultiPartParser, FormParser
+import base64
+from django.core.files.base import ContentFile
 
 
 class PlaceListView(APIView):
@@ -21,7 +23,7 @@ class PlaceListView(APIView):
         else:
             places = Place.objects.filter(business__in=business.split(','), location__in=location.split(','))
         serializer = PlaceListSerializer(places, many=True)
-        return Response(serializer.data)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 class PlaceDetailView(APIView):
@@ -32,7 +34,8 @@ class PlaceDetailView(APIView):
 
     @swagger_auto_schema(request_body=PlaceSerializer)
     def post(self, request):
-        serializer = PlaceSerializer(data=request.data, context={'request': request})
+        data = request.data
+        serializer = PlaceSerializer(data=data, context={'request': request})
         if serializer.is_valid():
             serializer.save(ceoId=request.user)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
