@@ -20,7 +20,7 @@ class PlaceListSerializer(serializers.ModelSerializer):
         model = Place
         fields = ['id', 'placeName', 'placeImageUrl', 'business', 'location', 'article', 'cost']
 
-    def get_placeimageurl(self, obj):
+    def get_placeImageUrl(self, obj):
         placeImage = PlaceImage.objects.filter(placeId=obj).first()
         if placeImage is None:
             return None
