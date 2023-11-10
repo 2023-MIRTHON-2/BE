@@ -49,7 +49,6 @@ class User(AbstractBaseUser, PermissionsMixin):
     phone = models.CharField(max_length=128)  # 전화번호
     is_ceo = models.BooleanField(default=False)
 
-
     REQUIRED_FIELDS = []
     USERNAME_FIELD = 'username'
 
@@ -57,9 +56,6 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     email = None
     email_verified = None
-
-    # class Meta:
-    #     db_table = 'users'
 
     def __str__(self):
         return self.username
