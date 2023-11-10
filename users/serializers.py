@@ -3,6 +3,7 @@ from rest_framework import serializers
 import base64
 
 from dj_rest_auth.registration.serializers import RegisterSerializer
+from places.serializers import PlaceForMyPageSerializer
 from allauth.account.adapter import get_adapter
 
 
@@ -61,4 +62,7 @@ class CustomRenterRegisterSerializer(RegisterSerializer):
 class CustomUserDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['id', 'username', 'realname', 'phone', 'is_ceo']
+        fields = ['id', 'username', 'realname', 'phone', 'is_ceo', 'placeList']
+
+    placeList = PlaceForMyPageSerializer(many=True, read_only=True, source='place_set')
+
