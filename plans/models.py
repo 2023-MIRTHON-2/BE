@@ -30,3 +30,6 @@ class Plan(models.Model):
     inquiry = models.TextField()  # 문의사항
     received_date = models.DateTimeField(auto_now_add=True)  # 접수 일자
     approval = models.BooleanField(default=False)  # 계약 승인 여부
+
+    def __str__(self):
+        return self.name
