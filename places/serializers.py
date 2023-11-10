@@ -2,8 +2,7 @@ from django.core import serializers
 from rest_framework import serializers
 from rest_framework.fields import ReadOnlyField
 from .models import Place, ImpossibleDate, PlaceImage
-from users.models import User
-import time
+from utils import check_license_number
 
 
 class PlaceImageSerializer(serializers.ModelSerializer):
@@ -54,6 +53,13 @@ class PlaceSerializer(serializers.ModelSerializer):
             PlaceImage.objects.create(placeId=place, placeImageUrl=image_data)
         for date_data in self.context.get('request').data.getlist('impossibleDate'):
             ImpossibleDate.objects.create(placeId=place, impossibleDate=int(date_data))
+        license_number = self.initial_data.get('licenseNum', '')
+        company_number = check_license_number(license_number)
+        if company_number:
+            place.licenseNum = company_number  # 검증된 사업자 등록번호 저장
+            place.save()  # 변경사항을 저장합니다.
+        else:
+            raise serializers.ValidationError("유효하지 않은 사업자 등록 번호입니다.")
 
         return place
 
