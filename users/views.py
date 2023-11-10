@@ -1,16 +1,12 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework import status
 from django.conf import settings
-import requests
 from .serializers import CustomRegisterSerializer, CustomRenterRegisterSerializer
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from .models import User
-import base64
-from django.core.files.base import ContentFile
-API_KEY = settings.API_KEY
 
+# API_KEY = settings.API_KEY
 
 # class CheckLicenseView(APIView):
 #
@@ -72,6 +68,7 @@ class RegisterAPIView(APIView):
         # If validation fails, return the errors
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+
 class CheckUsernameAPIView(APIView):
     # 사용자 이름 중복 확인
     def get(self, request, username):
@@ -79,7 +76,3 @@ class CheckUsernameAPIView(APIView):
             return Response({'message': '이미 존재하는 이름입니다.', 'available': 0}, status=status.HTTP_200_OK)
         else:
             return Response({'message': '사용 가능한 사용자 이름입니다.', 'available': 1}, status=status.HTTP_200_OK)
-
-
-
-
