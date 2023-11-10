@@ -1,10 +1,9 @@
-from .models import User, Category
+from .models import User
 from rest_framework import serializers
-import base64
 
 from dj_rest_auth.registration.serializers import RegisterSerializer
 from places.serializers import PlaceForMyPageSerializer
-from allauth.account.adapter import get_adapter
+from plans.serializers import ApprovalContractSerializer
 
 
 class CustomRegisterSerializer(RegisterSerializer):
@@ -62,7 +61,7 @@ class CustomRenterRegisterSerializer(RegisterSerializer):
 class CustomUserDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['id', 'username', 'realname', 'phone', 'is_ceo', 'placeList']
+        fields = ['id', 'username', 'realname', 'phone', 'is_ceo', 'placeList', 'planList']
 
     placeList = PlaceForMyPageSerializer(many=True, read_only=True, source='place_set')
-
+    planList = ApprovalContractSerializer(many=True, read_only=True, source='plan_set')
