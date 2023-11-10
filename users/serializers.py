@@ -33,6 +33,7 @@ class CustomRegisterSerializer(RegisterSerializer):
 
 
 class CustomRenterRegisterSerializer(RegisterSerializer):
+
     id = serializers.IntegerField(read_only=True)
     realname = serializers.CharField(max_length=255)
     phone = serializers.CharField(max_length=50)

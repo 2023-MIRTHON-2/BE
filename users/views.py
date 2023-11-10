@@ -51,10 +51,13 @@ class RegisterAPIView(APIView):
             refresh_token = str(token)
             access_token = str(token.access_token)
 
+            user_data = serializer.data
+            user_data['id'] = user.id
+
             # Prepare the response
             res = Response(
                 {
-                    "user": serializer.data,
+                    "user": user_data,
                     "message": "register success",
                     "token": {
                         "access": access_token,
