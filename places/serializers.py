@@ -56,3 +56,15 @@ class PlaceSerializer(serializers.ModelSerializer):
             ImpossibleDate.objects.create(placeId=place, impossibleDate=int(date_data))
 
         return place
+
+
+class PlaceForMyPageSerializer(serializers.ModelSerializer):
+    placeImageUrl = serializers.SerializerMethodField('get_placeImageUrl')
+
+    def get_placeImageUrl(self, obj):
+        return obj.placeimage_set.first().placeImageUrl.url
+
+    class Meta:
+        model = Place
+        fields = ['id', 'placeName', 'licenseNum', 'placeImageUrl', 'business', 'location',
+                  'article', 'cost']

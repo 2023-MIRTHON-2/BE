@@ -2,7 +2,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from django.conf import settings
-from .serializers import CustomRegisterSerializer, CustomRenterRegisterSerializer
+from .serializers import CustomRegisterSerializer, CustomRenterRegisterSerializer, CustomUserDetailSerializer
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from .models import User
 import requests
@@ -80,3 +80,10 @@ class CheckUsernameAPIView(APIView):
             return Response({'message': '이미 존재하는 이름입니다.', 'available': 0}, status=status.HTTP_200_OK)
         else:
             return Response({'message': '사용 가능한 사용자 이름입니다.', 'available': 1}, status=status.HTTP_200_OK)
+
+
+class UserDetailView(APIView):
+    def get(self, request, user_id):
+        user = User.objects.get(id=user_id)
+        serializer = CustomUserDetailSerializer(user)
+        return Response(serializer.data, status=status.HTTP_200_OK)
