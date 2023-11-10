@@ -38,13 +38,6 @@ urlpatterns = [
     path('plans/', include('plans.urls')),
     path('dj/', include('dj_rest_auth.urls')),
     path('dj/signup/', include('dj_rest_auth.registration.urls')),
-    # 비밀번호가 반려되는 기준
-    # 1. 비밀번호가 너무 짧은 경우(기본값은 8)
-    # 2. 숫자가 포함되지 않은 경우
-    # 3. 비밀번호가 일상적인 경우(기본값은 8)
-    # 4. 비밀번호가 공백인 경우
-    # 5. 비밀번호가 일치하지 않는 경우
-    # 이 기준이 어디서 오냐면, dj-rest-auth의 PasswordResetSerializer에서 온다.
 
 
     url(r'^swagger(?P<format>\.json|\.yaml)/$', schema_view.without_ui(cache_timeout=0), name='schema-json'),
