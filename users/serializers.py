@@ -5,6 +5,7 @@ import base64
 from dj_rest_auth.registration.serializers import RegisterSerializer
 from allauth.account.adapter import get_adapter
 
+
 class CustomRegisterSerializer(RegisterSerializer):
     id = serializers.IntegerField(read_only=True)
     realname = serializers.CharField(max_length=255)
@@ -29,6 +30,8 @@ class CustomRegisterSerializer(RegisterSerializer):
         user.is_ceo = self.validated_data.get('is_ceo', True)
         user.save()
         return user
+
+
 class CustomRenterRegisterSerializer(RegisterSerializer):
     id = serializers.IntegerField(read_only=True)
     realname = serializers.CharField(max_length=255)
@@ -54,8 +57,8 @@ class CustomRenterRegisterSerializer(RegisterSerializer):
         user.save()
         return user
 
+
 class CustomUserDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['id','username', 'realname', 'phone', 'is_ceo']
-
+        fields = ['id', 'username', 'realname', 'phone', 'is_ceo']
