@@ -10,15 +10,16 @@ class PlanSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Plan
-        fields = ['id', 'ceoId', 'renterId', 'placeId', 'name', 'phone', 'startDate', 'endDate', 'bussiness', 'information', 'inquiry',
-                  'received_date', 'approval']
+        fields = ['id', 'ceoId', 'renterId', 'placeId', 'name', 'phone', 'startDate', 'endDate', 'business',
+                  'information', 'inquiry', 'received_date', 'approval']
 
 
 class PlanShowSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)
+
     class Meta:
         model = Plan
-        fields = ['id', 'name', 'phone', 'startDate', 'endDate', 'bussiness', 'information', 'inquiry']
+        fields = ['id', 'name', 'phone', 'startDate', 'endDate', 'business', 'information', 'inquiry']
 
 
 class PlanRenterShowSerializer(serializers.ModelSerializer):
@@ -46,11 +47,11 @@ class ContractShowSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)
     ceoId = serializers.CharField(source='ceoId.username', read_only=True)
     ceoPhone = serializers.SerializerMethodField()
-    ceoBussiness = serializers.SerializerMethodField()
+    ceoBusiness = serializers.SerializerMethodField()
     ceoLocation = serializers.SerializerMethodField()
     renterId = serializers.CharField(source='renterId.username', read_only=True)
     renterPhone = serializers.SerializerMethodField()
-    renterBussiness = serializers.SerializerMethodField()
+    renterBusiness = serializers.SerializerMethodField()
     placeId = serializers.CharField(source='placeId.placeName', read_only=True)
     placeStartDate = serializers.SerializerMethodField()
     placeEndDate = serializers.SerializerMethodField()
@@ -59,8 +60,8 @@ class ContractShowSerializer(serializers.ModelSerializer):
     def get_ceoPhone(self, obj):
         return obj.ceoId.phone if obj.ceoId else None
 
-    def get_ceoBussiness(self, obj):
-        return obj.placeId.bussiness if obj.placeId else None
+    def get_ceoBusiness(self, obj):
+        return obj.placeId.business if obj.placeId else None
 
     def get_ceoLocation(self, obj):
         return obj.placeId.location if obj.placeId else None
@@ -68,8 +69,8 @@ class ContractShowSerializer(serializers.ModelSerializer):
     def get_renterPhone(self, obj):
         return obj.renterId.phone if obj.renterId else None
 
-    def get_renterBussiness(self, obj):
-        return obj.bussiness if obj.renterId else None
+    def get_renterBusiness(self, obj):
+        return obj.business if obj.renterId else None
 
     def get_placeStartDate(self, obj):
         return obj.placeId.startDate if obj.placeId else None
@@ -83,8 +84,7 @@ class ContractShowSerializer(serializers.ModelSerializer):
     class Meta:
         model = Plan  # 실제 모델 이름으로 교체해야 합니다.
         fields = [
-            'id', 'ceoId', 'ceoPhone', 'ceoBussiness', 'ceoLocation',
-            'renterId', 'renterPhone', 'renterBussiness',
+            'id', 'ceoId', 'ceoPhone', 'ceoBusiness', 'ceoLocation', 'renterId', 'renterPhone', 'renterBusiness',
             'placeId', 'placeStartDate', 'placeEndDate', 'placeCost'
         ]
         read_only_fields = ('id', 'ceoId', 'renterId', 'placeId')
