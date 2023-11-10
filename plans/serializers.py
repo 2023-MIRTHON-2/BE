@@ -88,3 +88,15 @@ class ContractShowSerializer(serializers.ModelSerializer):
             'placeId', 'placeStartDate', 'placeEndDate', 'placeCost'
         ]
         read_only_fields = ('id', 'ceoId', 'renterId', 'placeId')
+
+
+class ContractSerializer(serializers.ModelSerializer): # approval이 True인 것만 보여준다.
+    id = serializers.IntegerField(read_only=True)
+    ceoId = serializers.CharField(source='ceoId.username', read_only=True)
+    renterId = serializers.CharField(source='renterId.username', read_only=True)
+    placeId = serializers.CharField(source='placeId.placeName', read_only=True)
+
+    class Meta:
+        model = Plan
+        fields = ['id', 'ceoId', 'renterId', 'placeId', 'name', 'phone', 'startDate', 'endDate', 'business',
+                  'information', 'inquiry', 'received_date', 'approval']
