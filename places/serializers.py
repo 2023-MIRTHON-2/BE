@@ -57,6 +57,13 @@ class PlaceSerializer(serializers.ModelSerializer):
 
         return place
 
+    def to_representation(self, instance):
+        ret = super().to_representation(instance)
+        ret['placeImageUrl'] = [placeImageUrl.placeImageUrl.url for placeImageUrl in instance.placeimage_set.all()]
+        ret['impossibleDate_list'] = [impossibleDate.impossibleDate for impossibleDate in
+                                      instance.impossibledate_set.all()]
+        return ret
+
 
 class PlaceForMyPageSerializer(serializers.ModelSerializer):
     placeImageUrl = serializers.SerializerMethodField('get_placeImageUrl')

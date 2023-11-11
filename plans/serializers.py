@@ -2,6 +2,12 @@ from rest_framework import serializers
 from .models import Plan
 
 
+# class ImpossibleDateSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = ImpossibleDate
+#         fields = ['impossibleDate']
+
+
 class PlanSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)
     ceoId = serializers.CharField(source='ceoId.username', read_only=True)
@@ -88,3 +94,19 @@ class ContractShowSerializer(serializers.ModelSerializer):
             'placeId', 'placeStartDate', 'placeEndDate', 'placeCost'
         ]
         read_only_fields = ('id', 'ceoId', 'renterId', 'placeId')
+
+
+
+class ApprovalContractSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(read_only=True)
+    ceoId = serializers.CharField(source='ceoId.username', read_only=True)
+    placeId = serializers.CharField(source='placeId.placeName', read_only=True)
+    renterId = serializers.CharField(source='renterId.username', read_only=True)
+
+    class Meta:
+        model = Plan
+        fields = [
+            'id', 'ceoId', 'renterId',
+            'placeId', 'startDate', 'endDate'
+        ]
+        read_only_fields = ('id', 'renterId', 'placeId')

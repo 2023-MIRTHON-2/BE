@@ -2,7 +2,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from django.conf import settings
-from .serializers import CustomRegisterSerializer, CustomRenterRegisterSerializer, CustomUserDetailSerializer
+from .serializers import CustomRegisterSerializer, CustomRenterRegisterSerializer, MypageCustomUserDetailSerializer
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from .models import User
 import requests
@@ -51,10 +51,13 @@ class RegisterAPIView(APIView):
             refresh_token = str(token)
             access_token = str(token.access_token)
 
+            user_data = serializer.data
+            user_data['id'] = user.id
+
             # Prepare the response
             res = Response(
                 {
-                    "user": serializer.data,
+                    "user": user_data,
                     "message": "register success",
                     "token": {
                         "access": access_token,
@@ -85,5 +88,5 @@ class CheckUsernameAPIView(APIView):
 class UserDetailView(APIView):
     def get(self, request, user_id):
         user = User.objects.get(id=user_id)
-        serializer = CustomUserDetailSerializer(user)
+        serializer = MypageCustomUserDetailSerializer(user)
         return Response(serializer.data, status=status.HTTP_200_OK)

@@ -1,10 +1,10 @@
-from .models import User, Category
+from .models import User
+from plans.models import Plan
 from rest_framework import serializers
-import base64
 
 from dj_rest_auth.registration.serializers import RegisterSerializer
 from places.serializers import PlaceForMyPageSerializer
-from allauth.account.adapter import get_adapter
+from plans.serializers import ApprovalContractSerializer
 
 
 class CustomRegisterSerializer(RegisterSerializer):
@@ -34,6 +34,7 @@ class CustomRegisterSerializer(RegisterSerializer):
 
 
 class CustomRenterRegisterSerializer(RegisterSerializer):
+
     id = serializers.IntegerField(read_only=True)
     realname = serializers.CharField(max_length=255)
     phone = serializers.CharField(max_length=50)
@@ -59,10 +60,21 @@ class CustomRenterRegisterSerializer(RegisterSerializer):
         return user
 
 
+class MypageCustomUserDetailSerializer(serializers.ModelSerializer):
+    placeList = PlaceForMyPageSerializer(many=True, read_only=True, source='place_set')
+    planList = serializers.SerializerMethodField()
+
+    class Meta:
+        model = User
+        fields = ['id', 'username', 'realname', 'phone', 'is_ceo', 'placeList', 'planList']
+
+    def get_planList(self, obj):
+        # approval 속성이 True인 Plan 객체만 필터링합니다.
+        approved_plans = Plan.objects.filter(ceoId=obj, approval=True)
+        # 필터링된 QuerySet을 ApprovalContractSerializer를 사용하여 직렬화합니다.
+        return ApprovalContractSerializer(approved_plans, many=True).data
+
 class CustomUserDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['id', 'username', 'realname', 'phone', 'is_ceo', 'placeList']
-
-    placeList = PlaceForMyPageSerializer(many=True, read_only=True, source='place_set')
-
+        fields = ['id', 'username', 'realname', 'phone', 'is_ceo']
