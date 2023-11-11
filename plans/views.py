@@ -107,7 +107,12 @@ class MypageList(generics.ListAPIView):
 
     def get_queryset(self):
         """
-        현재 로그인한 사용자가 CEO이며, URL 파라미터로 주어진 place_Id와 관련된 Plan 객체만 필터링합니다.
+        현재 로그인한 사용자의 is_ceo 상태에 따라 다른 Plan 객체를 필터링합니다.
+        CEO일 경우, ceoId가 현재 사용자이고 approval이 True인 Plan을 반환합니다.
+        CEO가 아닐 경우, renterId가 현재 사용자이고 approval이 True인 Plan을 반환합니다.
         """
         user = self.request.user
-        return Plan.objects.filter(ceoId=user, approval=True)
+        if user.is_ceo:
+            return Plan.objects.filter(ceoId=user, approval=True)
+        else:
+            return Plan.objects.filter(renterId=user, approval=True)
