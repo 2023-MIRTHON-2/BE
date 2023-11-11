@@ -1,8 +1,7 @@
 from rest_framework import generics, status, permissions
 from django.shortcuts import get_object_or_404
 from .models import User, Place, Plan
-from .serializers import PlanSerializer, PlanShowSerializer, PlanRenterShowSerializer, PlanCeoShowSerializer, \
-    ContractShowSerializer
+from .serializers import PlanSerializer, PlanShowSerializer, PlanRenterShowSerializer, PlanCeoShowSerializer, ApprovalContractSerializer, ContractShowSerializer
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
@@ -90,7 +89,7 @@ class PlansCeoList(generics.ListAPIView):
         """
         user = self.request.user
         place_id = self.kwargs['place_Id']
-        return Plan.objects.filter(ceoId=user, placeId=place_id)
+        return Plan.objects.filter(ceoId=user, placeId=place_id, approval=True)
 
 
 class ContractShow(generics.RetrieveAPIView):
@@ -100,3 +99,15 @@ class ContractShow(generics.RetrieveAPIView):
     def get_object(self):
         plan_id = self.kwargs.get('plan_Id')
         return get_object_or_404(Plan, pk=plan_id)
+
+
+class MypageList(generics.ListAPIView):
+    serializer_class = ApprovalContractSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        """
+        현재 로그인한 사용자가 CEO이며, URL 파라미터로 주어진 place_Id와 관련된 Plan 객체만 필터링합니다.
+        """
+        user = self.request.user
+        return Plan.objects.filter(ceoId=user, approval=True)

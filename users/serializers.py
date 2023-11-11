@@ -1,4 +1,5 @@
 from .models import User
+from plans.models import Plan
 from rest_framework import serializers
 
 from dj_rest_auth.registration.serializers import RegisterSerializer
@@ -60,9 +61,15 @@ class CustomRenterRegisterSerializer(RegisterSerializer):
 
 
 class CustomUserDetailSerializer(serializers.ModelSerializer):
+    placeList = PlaceForMyPageSerializer(many=True, read_only=True, source='place_set')
+    planList = serializers.SerializerMethodField()
+
     class Meta:
         model = User
         fields = ['id', 'username', 'realname', 'phone', 'is_ceo', 'placeList', 'planList']
 
-    placeList = PlaceForMyPageSerializer(many=True, read_only=True, source='place_set')
-    planList = ApprovalContractSerializer(many=True, read_only=True, source='plan_set')
+    def get_planList(self, obj):
+        # approval 속성이 True인 Plan 객체만 필터링합니다.
+        approved_plans = Plan.objects.filter(ceoId=obj, approval=True)
+        # 필터링된 QuerySet을 ApprovalContractSerializer를 사용하여 직렬화합니다.
+        return ApprovalContractSerializer(approved_plans, many=True).data
