@@ -99,9 +99,9 @@ class ContractShowSerializer(serializers.ModelSerializer):
 
 class ApprovalContractSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)
-    ceoId = serializers.CharField(source='ceoId.username', read_only=True)
+    ceoId = serializers.CharField(source='ceoId.realname', read_only=True)
     placeId = serializers.CharField(source='placeId.placeName', read_only=True)
-    renterId = serializers.CharField(source='renterId.username', read_only=True)
+    renterId = serializers.CharField(source='renterId.realname', read_only=True)
 
     class Meta:
         model = Plan

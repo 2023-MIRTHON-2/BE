@@ -86,7 +86,9 @@ class CheckUsernameAPIView(APIView):
 
 
 class UserDetailView(APIView):
+
     def get(self, request, user_id):
         user = User.objects.get(id=user_id)
         serializer = MypageCustomUserDetailSerializer(user)
         return Response(serializer.data, status=status.HTTP_200_OK)
+

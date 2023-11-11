@@ -69,8 +69,12 @@ class MypageCustomUserDetailSerializer(serializers.ModelSerializer):
         fields = ['id', 'username', 'realname', 'phone', 'is_ceo', 'placeList', 'planList']
 
     def get_planList(self, obj):
-        # approval 속성이 True인 Plan 객체만 필터링합니다.
-        approved_plans = Plan.objects.filter(ceoId=obj, approval=True)
+        # 사용자가 CEO일 경우 ceoId를, 그렇지 않을 경우 renterId를 사용합니다.
+        if obj.is_ceo:
+            approved_plans = Plan.objects.filter(ceoId=obj, approval=True)
+        else:
+            approved_plans = Plan.objects.filter(renterId=obj, approval=True)
+
         # 필터링된 QuerySet을 ApprovalContractSerializer를 사용하여 직렬화합니다.
         return ApprovalContractSerializer(approved_plans, many=True).data
 
