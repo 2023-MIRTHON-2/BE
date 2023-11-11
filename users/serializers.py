@@ -34,7 +34,6 @@ class CustomRegisterSerializer(RegisterSerializer):
 
 
 class CustomRenterRegisterSerializer(RegisterSerializer):
-
     id = serializers.IntegerField(read_only=True)
     realname = serializers.CharField(max_length=255)
     phone = serializers.CharField(max_length=50)
@@ -77,6 +76,7 @@ class MypageCustomUserDetailSerializer(serializers.ModelSerializer):
 
         # 필터링된 QuerySet을 ApprovalContractSerializer를 사용하여 직렬화합니다.
         return ApprovalContractSerializer(approved_plans, many=True).data
+
 
 class CustomUserDetailSerializer(serializers.ModelSerializer):
     class Meta:
