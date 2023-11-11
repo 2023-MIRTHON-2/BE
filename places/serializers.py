@@ -12,7 +12,6 @@ class PlaceImageSerializer(serializers.ModelSerializer):
 
 
 class PlaceListSerializer(serializers.ModelSerializer):
-    # placeImageUrl = PlaceImageSerializer(read_only=True, source='placeimage_set.first') # object로 보내지 않고, 하나만 보낸다.
     placeImageUrl = serializers.SerializerMethodField('get_placeImageUrl')
 
     def get_placeImageUrl(self, obj):
@@ -34,11 +33,12 @@ class PlaceSerializer(serializers.ModelSerializer):
     placeImageUrl = PlaceImageSerializer(many=True, read_only=True, source='placeimage_set')
     impossibleDate_list = ImpossibleDateSerializer(many=True, read_only=True, source='impossibledate_set')
     ceoId = ReadOnlyField(source='ceoId.id')
+    phone = ReadOnlyField(source='ceoId.phone')
 
     class Meta:
         model = Place
         fields = ['id', 'ceoId', 'placeName', 'placeImageUrl', 'licenseNum', 'lease', 'business', 'location',
-                  'article', 'cost', 'impossibleDate_list']
+                  'article', 'cost', 'impossibleDate_list', 'phone']
 
     def create(self, validated_data):
         images_data = self.context.get('request').FILES
