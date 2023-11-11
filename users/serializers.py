@@ -72,7 +72,7 @@ class MypageCustomUserDetailSerializer(serializers.ModelSerializer):
         if obj.is_ceo:
             approved_plans = Plan.objects.filter(ceoId=obj, approval=True)
         else:
-            approved_plans = Plan.objects.filter(renterId=obj, approval=True)
+            approved_plans = Plan.objects.filter(renterId=obj)
 
         # 필터링된 QuerySet을 ApprovalContractSerializer를 사용하여 직렬화합니다.
         return ApprovalContractSerializer(approved_plans, many=True).data
