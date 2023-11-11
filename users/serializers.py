@@ -60,7 +60,7 @@ class CustomRenterRegisterSerializer(RegisterSerializer):
         return user
 
 
-class CustomUserDetailSerializer(serializers.ModelSerializer):
+class MypageCustomUserDetailSerializer(serializers.ModelSerializer):
     placeList = PlaceForMyPageSerializer(many=True, read_only=True, source='place_set')
     planList = serializers.SerializerMethodField()
 
@@ -73,3 +73,8 @@ class CustomUserDetailSerializer(serializers.ModelSerializer):
         approved_plans = Plan.objects.filter(ceoId=obj, approval=True)
         # 필터링된 QuerySet을 ApprovalContractSerializer를 사용하여 직렬화합니다.
         return ApprovalContractSerializer(approved_plans, many=True).data
+
+class CustomUserDetailSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['id', 'username', 'realname', 'phone', 'is_ceo']
