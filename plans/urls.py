@@ -9,4 +9,5 @@ urlpatterns = [
     path('renter/list/', PlansRenterList.as_view(), name='plan-renter-list'),
     path('ceo/list/<int:place_Id>/', PlansCeoList.as_view(), name='plan-ceo-list'),
     path('contract/<int:plan_Id>/', ContractShow.as_view(), name='contract-show'),
+    path('mypage/', MypageList.as_view(), name='mypage'),
 ]
