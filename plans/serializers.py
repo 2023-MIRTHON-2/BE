@@ -96,7 +96,6 @@ class ContractShowSerializer(serializers.ModelSerializer):
         read_only_fields = ('id', 'ceoId', 'renterId', 'placeId')
 
 
-
 class ApprovalContractSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)
     ceoId = serializers.CharField(source='ceoId.realname', read_only=True)
