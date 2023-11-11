@@ -20,13 +20,14 @@ class PlaceView(APIView):
 class PlaceListView(APIView):
     def get(self, request, business, location):
         if business == 'total' and location == 'total':
-            places = Place.objects.all()
+            places = Place.objects.all().order_by('-id')
         elif business == 'total':
-            places = Place.objects.filter(location__in=location.split(','))
+            places = Place.objects.filter(location__in=location.split(',')).order_by('-id')
         elif location == 'total':
-            places = Place.objects.filter(business__in=business.split(','))
+            places = Place.objects.filter(business__in=business.split(',')).order_by('-id')
         else:
-            places = Place.objects.filter(business__in=business.split(','), location__in=location.split(','))
+            places = Place.objects.filter(business__in=business.split(','), location__in=location.split(',')).order_by(
+                '-id')
         serializer = PlaceListSerializer(places, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
@@ -39,7 +40,7 @@ class PlaceDetailView(APIView):
         serializer = PlaceSerializer(place)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-    @swagger_auto_schema(request_body=PlaceSerializer) # 이미지를 여러개 받을 수도 있다.
+    @swagger_auto_schema(request_body=PlaceSerializer)  # 이미지를 여러개 받을 수도 있다.
     def post(self, request):
         serializer = PlaceSerializer(data=request.data, context={'request': request})
         if serializer.is_valid():
