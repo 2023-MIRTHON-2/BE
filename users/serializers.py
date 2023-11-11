@@ -70,7 +70,7 @@ class MypageCustomUserDetailSerializer(serializers.ModelSerializer):
     def get_planList(self, obj):
         # 사용자가 CEO일 경우 ceoId를, 그렇지 않을 경우 renterId를 사용합니다.
         if obj.is_ceo:
-            approved_plans = Plan.objects.filter(ceoId=obj, approval=True)
+            approved_plans = Plan.objects.filter(ceoId=obj)
         else:
             approved_plans = Plan.objects.filter(renterId=obj)
 
