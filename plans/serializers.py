@@ -99,13 +99,14 @@ class ContractShowSerializer(serializers.ModelSerializer):
 
 class ApprovalContractSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)
+    ceoId = serializers.CharField(source='ceoId.username', read_only=True)
     placeId = serializers.CharField(source='placeId.placeName', read_only=True)
     renterId = serializers.CharField(source='renterId.username', read_only=True)
 
     class Meta:
         model = Plan
         fields = [
-            'id', 'renterId',
+            'id', 'ceoId', 'renterId',
             'placeId', 'startDate', 'endDate'
         ]
         read_only_fields = ('id', 'renterId', 'placeId')
