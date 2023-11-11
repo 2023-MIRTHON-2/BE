@@ -41,7 +41,7 @@ class Place(models.Model):
 class PlaceImage(models.Model):
     id = models.AutoField(primary_key=True)
     placeId = models.ForeignKey(Place, on_delete=models.CASCADE)
-    placeImageUrl = models.ImageField(upload_to='placeImage/', blank=True, null=True)
+    placeImageUrl = models.ImageField(upload_to='placeImage/')
 
     def __str__(self):
         return self.placeImageUrl
