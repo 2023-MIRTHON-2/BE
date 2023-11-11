@@ -1,8 +1,6 @@
 from django.shortcuts import get_object_or_404
 from drf_yasg.utils import swagger_auto_schema
-from drf_yasg import openapi
 
-from .models import Place
 from .serializers import *
 from rest_framework import status
 from rest_framework.views import APIView

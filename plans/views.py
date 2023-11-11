@@ -1,7 +1,8 @@
 from rest_framework import generics, status, permissions
 from django.shortcuts import get_object_or_404
 from .models import User, Place, Plan
-from .serializers import PlanSerializer, PlanShowSerializer, PlanRenterShowSerializer, PlanCeoShowSerializer, ApprovalContractSerializer, ContractShowSerializer
+from .serializers import PlanSerializer, PlanShowSerializer, PlanRenterShowSerializer, PlanCeoShowSerializer, \
+    ApprovalContractSerializer, ContractShowSerializer
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 

@@ -1,9 +1,4 @@
 import enum
-import datetime
-import os
-import time
-
-from django_unixdatetimefield import UnixDateTimeField
 
 from django.db import models
 from users.models import User
